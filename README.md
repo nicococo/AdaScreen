@@ -61,5 +61,5 @@ When using the software, or parts of it, please cite:
 _to appear_
 
 ### Authors
-Method: Seunghak Lee, Nico Goernitz, Eric P. Xing, David Heckerman, Christoph Lippert
-Software: Nico Goernitz & Seunghak Lee
+- Method: Seunghak Lee, Nico Goernitz, Eric P. Xing, David Heckerman, Christoph Lippert
+- Software: Nico Goernitz & Seunghak Lee
