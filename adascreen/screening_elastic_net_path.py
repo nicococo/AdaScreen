@@ -1,12 +1,11 @@
-import numpy as np
-import sklearn.linear_model as lm
-import scipy.optimize as opt
 import scipy.sparse as sparse
-import sklearn as sk
+import sklearn.linear_model as lm
+import numpy as np
 import time
 
+from screening_rules import ScreenDummy
+from solver import SklearnCDSolver
 
-from solver import *
 
 class ScreeningElasticNetPath(object):
     """ Elastic net solver with lambda path and screening. """
@@ -47,8 +46,8 @@ class ScreeningElasticNetPath(object):
         self.path_stepsize = path_stepsize
         self.path_scale = path_scale 
         # if not specified, use the active set cd solver        
-        if solver==None:
-            self.solver = ActiveSetCDSolver()
+        if solver == None:
+            self.solver = SklearnCDSolver()
         else:
             self.solver = solver
 
@@ -151,7 +150,7 @@ class ScreeningElasticNetPath(object):
             nz_inds.append(np.where(np.abs(res[:, i]) >= 1e-30)[0])
             print('Iter{0}: {1} non-zeros after lasso, {2} after screening.'.format(i, len(nz_inds[-1]), len(inds)))
             # (optional) (d) in debug mode, check if screening does not discard non-zero betas
-            if (debug):
+            if debug:
                 solver = lm.Lasso(alpha=path[i]/float(EXMS), normalize=False, fit_intercept=False, tol=tol, max_iter=50000)
                 solver.fit(X.T, y)
                 set_true = set(np.where(abs(solver.coef_)>=tol)[0])

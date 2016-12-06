@@ -9,7 +9,7 @@ config = {
     'author': 'Nico Goernitz',
     'author_email': 'nico.goernitz@tu-berlin.de',
     'version': '0.1',
-    'install_requires': ['nose', 'cvxopt','scikit-learn'],
+    'install_requires': ['nose', 'cvxopt', 'scikit-learn', 'numpy', 'gridmap'],
     'packages': ['adascreen'],
     'scripts': [],
     'name': 'adascreen',

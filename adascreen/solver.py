@@ -2,15 +2,26 @@ import numpy as np
 import sklearn.linear_model as lm
 
 # un-comment if you have compile enet_solver
-import enet_solver
+import imp
+try:
+    imp.find_module('enet_solver')
+    found_enet_solver = True
+    import enet_solver
+except ImportError:
+    found_enet_solver = False
 
 # un-comment if you have installed glmnet
-#import glmnet.glmnet as glmnet
+import imp
+try:
+    imp.find_module('glmnet')
+    found_glmnet_solver = True
+    import glmnet.glmnet as glmnet
+except ImportError:
+    found_glmnet_solver = False
 
 
 class AbstractSolver(object):
     """ Wrapper to enable the use of various solver for ElasticNet and Lasso. """
-    
     name = 'AbstractSolver'
 
     def __init__(self, name):
@@ -31,21 +42,23 @@ class AbstractSolver(object):
         return '{0}'.format(self.name)
 
 
-
 class SklearnCDSolver(AbstractSolver):
     """ Wrapper for sklearn solver for ElasticNet and Lasso. """
-
     def __init__(self):
         AbstractSolver.__init__(self, 'SklearnCDSolver')
 
     def solve(self, start_pos, X, y, l1_reg, l2_reg, max_iter=20000, tol=1e-6):
-        (coefs, dual_gap, eps) = lm.cd_fast.enet_coordinate_descent(start_pos, l1_reg, l2_reg, np.asfortranarray(X), y, max_iter, tol, False)
-        return (coefs, 0, dual_gap)
+        # (coefs, dual_gap, eps) = lm.cd_fast.enet_coordinate_descent(start_pos, l1_reg, l2_reg, np.asfortranarray(X), y, max_iter, tol, False)
+# coef_, l1_reg, l2_reg, X, y, max_iter, tol, rng, random, positive)
+
+        model = lm.cd_fast.enet_coordinate_descent(
+            start_pos, l1_reg, l2_reg, np.asfortranarray(X), y, max_iter, tol, np.random, 0, 0)
+        coefs, dual_gap, eps, n_iter_ = model
+        return coefs, 0, dual_gap
 
 
 class SklearnLarsSolver(AbstractSolver):
     """ Wrapper for sklearn solver for ElasticNet and Lasso. """
-
     def __init__(self):
         AbstractSolver.__init__(self, 'SklearnLarsSolver')
 
