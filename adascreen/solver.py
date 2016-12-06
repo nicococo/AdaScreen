@@ -49,11 +49,9 @@ class SklearnCDSolver(AbstractSolver):
 
     def solve(self, start_pos, X, y, l1_reg, l2_reg, max_iter=20000, tol=1e-6):
         # (coefs, dual_gap, eps) = lm.cd_fast.enet_coordinate_descent(start_pos, l1_reg, l2_reg, np.asfortranarray(X), y, max_iter, tol, False)
-# coef_, l1_reg, l2_reg, X, y, max_iter, tol, rng, random, positive)
-
-        model = lm.cd_fast.enet_coordinate_descent(
+        # coef_, l1_reg, l2_reg, X, y, max_iter, tol, rng, random, positive)
+        coefs, dual_gap, eps, n_iter_ = lm.cd_fast.enet_coordinate_descent(
             start_pos, l1_reg, l2_reg, np.asfortranarray(X), y, max_iter, tol, np.random, 0, 0)
-        coefs, dual_gap, eps, n_iter_ = model
         return coefs, 0, dual_gap
 
 
