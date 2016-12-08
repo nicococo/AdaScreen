@@ -6,7 +6,7 @@ import sklearn as skl
 import matplotlib.pyplot as plt
 
 from neighbor_select import NeighborSelect 
-from solver import SklearnCDSolver, ActiveSetCDSolver
+from solver import SklearnCDSolver, ActiveSetCDSolver, ProximalGradientSolver, AccelProximalGradientSolver
 from screening_rules import *
 
 
@@ -42,7 +42,7 @@ if __name__ == '__main__':
     print C_emp
 
     # neighborhood selection
-    nhs = NeighborSelect(EDPP(), ActiveSetCDSolver(0), path_lb=0.2, path_steps=5, path_scale='log')
+    nhs = NeighborSelect(EDPP(), AccelProximalGradientSolver(), path_lb=0.2, path_steps=5, path_scale='log')
     Cb = nhs.fit(np.ascontiguousarray(X))
     print Cb
 

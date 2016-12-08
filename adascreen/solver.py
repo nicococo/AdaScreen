@@ -1,5 +1,6 @@
 import numpy as np
 import sklearn.linear_model as lm
+import cvxopt as co
 
 # un-comment if you have compile enet_solver
 import imp
@@ -100,3 +101,128 @@ class GlmnetSolver(AbstractSolver):
             glmnet.elastic_net(np.asfortranarray(X), np.asfortranarray(y), \
             1.0, flmin=l1_reg/self.lmax, standardize=False)
         return (coef_[:,0], 0, 0.0)
+
+
+class ProximalGradientSolver(AbstractSolver):
+    """ Proximal gradient solver for elastic net. """
+    def __init__(self):
+        AbstractSolver.__init__(self, 'ProxGradientSolver')
+
+    def solve(self, start_pos, X, y, l1_reg, l2_reg, max_iter=20000, tol=1e-6):
+        # X \in R^(samples x feats)
+        # y \in R^samples
+        max_iter = 20000
+        b = y[:, np.newaxis]
+
+        # this is what we wanna solve:
+        #
+        # min_w 1/2 ||y - X w||^2 + l1_reg ||w||_1 + 1/2 l2_reg ||w||^2
+        #
+        # w \in R^(feats x 1)
+        f = lambda w : 0.5*(b-X.dot(w)).T.dot(b-X.dot(w)) \
+                        + l1_reg*np.sum(np.abs(w)) + 0.5*l2_reg*w.T.dot(w)
+        g = lambda u : 0.5*(b-X.dot(u)).T.dot(b-X.dot(u)) \
+                        + 0.5*l2_reg*u.T.dot(u)
+
+        w = np.zeros((X.shape[1], 1))
+        w = start_pos[:, np.newaxis]
+        tk = 1.
+        beta = 0.5
+
+        converged = False
+        old_obj = 0.
+        k = 0
+        while not converged and max_iter > k:
+            # optimization
+            while True:
+                grad_w = X.T.dot(X.dot(w)) + l2_reg*w - X.T.dot(b)
+                z = prox_l1_operator(tk*l1_reg, w-tk*grad_w)
+                # print z.shape, g(z), g(w)
+                if g(z) <= g(w) + grad_w.T.dot(z-w) + (1/(2*tk))*np.sum((z-w).T.dot(z-w)):
+                    w = z
+                    break
+                tk *= beta   # reduce step length
+
+            # convergence check
+            obj = f(w)
+            # print k, ' - ', obj
+            if k > 0 and np.abs(old_obj - obj) < tol:
+                converged = True
+            else:
+                old_obj = obj
+                k += 1
+
+        # baseline CD solver for comparison
+        # coefs, dual_gap, eps, n_iter_ = lm.cd_fast.enet_coordinate_descent(
+        #     start_pos, l1_reg, l2_reg, np.asfortranarray(X), y, max_iter, tol, np.random, 0, 0)
+        # print k, ' - ', np.abs(f(coefs[:, np.newaxis]) - f(w))
+        print k
+
+        return w.reshape((w.size)), 0, 0.
+
+
+class AccelProximalGradientSolver(AbstractSolver):
+    """ Proximal gradient solver for elastic net. """
+    def __init__(self):
+        AbstractSolver.__init__(self, 'AccelProxGradientSolver')
+
+    def solve(self, start_pos, X, y, l1_reg, l2_reg, max_iter=20000, tol=1e-6):
+        # X \in R^(samples x feats)
+        # y \in R^samples
+        max_iter = 20000
+        b = y[:, np.newaxis]
+
+        # this is what we wanna solve:
+        #
+        # min_w 1/2 ||y - X w||^2 + l1_reg ||w||_1 + 1/2 l2_reg ||w||^2
+        #
+        # w \in R^(feats x 1)
+        f = lambda w : 0.5*(b-X.dot(w)).T.dot(b-X.dot(w)) \
+                        + l1_reg*np.sum(np.abs(w)) + 0.5*l2_reg*w.T.dot(w)
+        g = lambda u : 0.5*(b-X.dot(u)).T.dot(b-X.dot(u)) \
+                        + 0.5*l2_reg*u.T.dot(u)
+
+        w = start_pos[:, np.newaxis]
+        w_old = w
+        tk = 1.
+        beta = 0.5
+
+        converged = False
+        old_obj = 0.
+        k = 0
+        while not converged and max_iter > k:
+            # optimization
+            y = w + (k/(k+3))*(w - w_old);
+            while True:
+                grad_y = X.T.dot(X.dot(y)) + l2_reg*y - X.T.dot(b)
+                z = prox_l1_operator(tk*l1_reg, w-tk*grad_y)
+                # print z.shape, g(z), g(w)
+                if g(z) <= g(y) + grad_y.T.dot(z-y) + (1/(2*tk))*np.sum((z-y).T.dot(z-y)):
+                    w_old = w
+                    w = z
+                    break
+                tk *= beta   # reduce step length
+
+            # convergence check
+            obj = f(w)
+            # print k, ' - ', obj
+            if k > 0 and np.abs(old_obj - obj) < tol:
+                converged = True
+            else:
+                old_obj = obj
+                k += 1
+
+        # baseline CD solver for comparison
+        # coefs, dual_gap, eps, n_iter_ = lm.cd_fast.enet_coordinate_descent(
+        #     start_pos, l1_reg, l2_reg, np.asfortranarray(X), b.reshape((b.size)), max_iter, tol, np.random, 0, 0)
+        # print k, ' - ', np.abs(f(coefs[:, np.newaxis]) - f(w))
+        print k
+
+        return w.reshape((w.size)), 0, 0.
+
+
+def prox_l1_operator(t, u):
+    u_star1 = np.hstack([ u-t*np.ones((u.size, 1)), np.zeros((u.size, 1))])
+    u_star2 = np.hstack([-u-t*np.ones((u.size, 1)), np.zeros((u.size, 1))])
+    z = np.max(u_star1, axis=1) - np.max(u_star2, axis=1)
+    return z[:, np.newaxis]
