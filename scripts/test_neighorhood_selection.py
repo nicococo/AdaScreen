@@ -15,7 +15,7 @@ if __name__ == '__main__':
         implementation against scipy version. 
     """
     N = 200  # number of training examples
-    DIMS = 5  # number of features
+    DIMS = 10  # number of features
     COV = eye(DIMS)  # covariance matrix
 
     CORR_RANGE = [0.3, 0.6]  # min and max off-diagonal correlations
@@ -42,7 +42,7 @@ if __name__ == '__main__':
     print C_emp
 
     # neighborhood selection
-    nhs = NeighborSelect(EDPP(), AccelProximalGradientSolver(), path_lb=0.2, path_steps=5, path_scale='log')
+    nhs = NeighborSelect(EDPP(), ProximalGradientSolver(), path_lb=0.2, path_steps=5, path_scale='log')
     Cb = nhs.fit(np.ascontiguousarray(X))
     print Cb
 
