@@ -1,6 +1,7 @@
 ### NEWS
 - Wiki can be found [here](https://github.com/nicococo/AdaScreen/wiki)
 - Bug-tracking can be found [here](https://github.com/nicococo/AdaScreen/issues)
+- Install conveniently via _pip install git+https://github.com/nicococo/AdaScreen.git_
 
 ### About the AdaScreen Software Package
 We developed our screening framework in the _Python_ programming language
