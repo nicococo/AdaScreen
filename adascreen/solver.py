@@ -170,11 +170,11 @@ class AccelProximalGradientSolver(AbstractSolver):
     def solve(self, start_pos, X, y, l1_reg, l2_reg, max_iter=20000, tol=1e-6, debug=False):
         # X \in R^(samples x feats)
         # y \in R^samples
-        # max_iter = 20000
+        #max_iter = 20000
         b = y[:, np.newaxis]
 
         # print tol
-        # tol = 1e-6
+        #tol = 1e-6
 
         # this is what we wanna solve:
         #

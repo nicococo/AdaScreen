@@ -8,9 +8,10 @@ config = {
     'url': 'https://github.com/nicococo/AdaScreen',
     'author': 'Nico Goernitz',
     'author_email': 'nico.goernitz@tu-berlin.de',
-    'version': '0.1',
+    'version': '2016.12.21',
     'install_requires': ['nose', 'cvxopt', 'scikit-learn', 'numpy', 'gridmap'],
-    'packages': ['adascreen'],
+    'packages': ['adascreen', 'adascreen_experiments'],  # names of the packages
+    'packages_dir': ['adascreen', 'scripts'],  # locations of the actual package in the source tree
     'scripts': [],
     'name': 'adascreen',
     'classifiers':['Intended Audience :: Science/Research',

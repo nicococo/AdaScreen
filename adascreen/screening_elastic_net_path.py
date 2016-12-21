@@ -18,7 +18,7 @@ class ScreeningElasticNetPath(object):
                                 # since the distance between the actual lambda and lmax will increase in 
                                 # each iteration.
 
-    use_warm_start = True # This should be always true, otherwise training time will increase tremendously.
+    use_warm_start = True  # This should be always true, otherwise training time will increase tremendously.
 
     # lambda path options
     path = None
@@ -30,7 +30,6 @@ class ScreeningElasticNetPath(object):
 
     # the actual solver
     solver = None
-
 
     def __init__(self, alg_screen, solver, \
         path_lb=0.7, path_ub=1.0, path_steps=10, path_stepsize=0.9, path_scale='geometric'):
@@ -77,23 +76,19 @@ class ScreeningElasticNetPath(object):
         lmax_ind = int(np.argmax(vals))
         lmax = float(vals[lmax_ind])
         lmax_x = X[lmax_ind,:]
-        
-        #print lmax_x.dot(y)
-        #print -lmax_x.dot(y)
-        #print vals[lmax_ind]
 
         print lmax_x.dot(y)
         if lmax_x.dot(y)<0.0:
             print -lmax_x.dot(y)
             lmax_x = -lmax_x
-        return (lmax, lmax_ind, lmax_x)
+        return lmax, lmax_ind, lmax_x
     
     def fit(self, X, y, l2=0.0, max_iter=1000, tol=1e-6, debug=True):
         if sparse.issparse(X):
             raise Exception('SPARSE MATRIX NOT SUPPORTED YET')
  
         # init
-        (lmax, lmax_ind, lmax_x) = self.calc_lambda_max(X,y)
+        lmax, lmax_ind, lmax_x = self.calc_lambda_max(X,y)
         path = self.get_plain_path() * lmax
 
         # screening args
@@ -101,7 +96,7 @@ class ScreeningElasticNetPath(object):
         normX = np.linalg.norm(X, axis=1)
 
         P = len(path)
-        (DIMS, EXMS) = X.shape
+        DIMS, EXMS = X.shape
         print DIMS
         print EXMS
         res = np.zeros((DIMS, P)) # intermediate solutions (beta for all lambda) 
@@ -131,18 +126,18 @@ class ScreeningElasticNetPath(object):
             # (a) remove variables either one-shot screening or sequential
             startTime = time.time()
             if self.one_shot_screening:
-                (inds, interval) = self.alg_screen.screen(path[i], lmax, lmax, lmax_x, np.zeros(DIMS), X, y, normX, normy, nz_inds[0], intervals[0])
+                inds, interval = self.alg_screen.screen(path[i], lmax, lmax, lmax_x, np.zeros(DIMS), X, y, normX, normy, nz_inds[0], intervals[0])
             else:
-                (inds, interval) = self.alg_screen.screen(path[i], path[i-1], lmax, lmax_x, res[:,i-1], X, y, normX, normy, nz_inds[i-1], intervals[i-1])
+                inds, interval = self.alg_screen.screen(path[i], path[i-1], lmax, lmax_x, res[:,i-1], X, y, normX, normy, nz_inds[i-1], intervals[i-1])
             times_screening.append(time.time()-startTime)
             intervals.append(interval)
 
             # (b) solve lasso for current lambda using hot-start 'beta'
             startTime = time.time()
             if self.use_warm_start:
-                (res[inds,i], iters, gap) = self.solver.solve(res[inds,i-1], X[inds,:].T, y, path[i], l2, max_iter=max_iter, tol=tol)
+                res[inds,i], iters, gap = self.solver.solve(res[inds,i-1], X[inds,:].T, y, path[i], l2, max_iter=max_iter, tol=tol)
             else:
-                (res[inds,i], iters, gap) = self.solver.solve(res[inds,0], X[inds,:].T, y, path[i], l2, max_iter=max_iter, tol=tol)
+                res[inds,i], iters, gap = self.solver.solve(res[inds,0], X[inds,:].T, y, path[i], l2, max_iter=max_iter, tol=tol)
             times_solver.append(time.time()-startTime)
 
             # (c) re-construct parameter vector
@@ -172,8 +167,12 @@ class ScreeningElasticNetPath(object):
         # delete screening caches, if any
         self.alg_screen.release()
         self.solver.release()
-        return (res, nz_inds, scr_inds, path, times_solver, times_screening)
+        return res, nz_inds, scr_inds, path, times_solver, times_screening
 
-    def predict(self, X):
-        raise NotImplementedError
-
+    def predict_path(self, res, X):
+        # X \in R^{feats x samples}
+        # res \in R^{feats x #path}
+        preds = np.zeros((X.shape[1], res.shape[1]))  # samples x #path
+        for i in range(res.shape[1]):
+            preds[:, i] = res[:, i].T.dot(X).T
+        return preds
