@@ -1,7 +1,4 @@
 ### NEWS
-- This page, as well as the corresponding code on GitHub, is currently undergoing
-major changes and likely not to work properly. Please come back later... :)
-
 - Wiki can be found [here](https://github.com/nicococo/AdaScreen/wiki)
 - Bug-tracking can be found [here](https://github.com/nicococo/AdaScreen/issues)
 
