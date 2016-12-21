@@ -9,7 +9,7 @@ config = {
     'author': 'Nico Goernitz',
     'author_email': 'nico.goernitz@tu-berlin.de',
     'version': '2016.12.21',
-    'install_requires': ['nose', 'cvxopt', 'scikit-learn', 'numpy', 'gridmap'],
+    'install_requires': ['nose', 'scikit-learn', 'numpy', 'gridmap'],
     'packages': ['adascreen', 'adascreen_experiments'],  # names of the packages
     'package_dir': {'adascreen' : 'adascreen', 'adascreen_experiments' : 'scripts'},  # locations of the actual package in the source tree
     'scripts': ['bin/adascreen_experiment.sh'],
