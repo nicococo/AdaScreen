@@ -1,6 +1,7 @@
 import sys
 import os
 import argparse
+import logging
 
 from gridmap import Job, process_jobs
 
@@ -14,7 +15,7 @@ def remote_iteration(r, arguments, exms_to_load, directory):
     from adascreen.bagscreen import BagScreen
     from adascreen.adascreen import AdaScreen
     from adascreen.sasvi import Sasvi
-    import utils
+    import adascreen.utils as utils
     import uuid
     
     startMem = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
@@ -198,7 +199,6 @@ def remote_save_result(results, props, x, arguments, exms_to_load, directory):
 
 
 
-import logging
 logging.captureWarnings(True)
 logging.basicConfig(format=('%(asctime)s - %(name)s - %(levelname)s - ' +
                             '%(message)s'), level=logging.INFO)
