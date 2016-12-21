@@ -1,6 +1,5 @@
 import numpy as np
 import sklearn.linear_model as lm
-import cvxopt as co
 
 # un-comment if you have compile enet_solver
 import imp
