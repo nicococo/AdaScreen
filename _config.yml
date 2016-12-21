@@ -1,0 +1,8 @@
+title: AdaScreen
+description: Ensembles of Screening Rules
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-slate
+
+gems:
+  - jekyll-mentions
