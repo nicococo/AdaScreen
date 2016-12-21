@@ -12,7 +12,7 @@ config = {
     'install_requires': ['nose', 'cvxopt', 'scikit-learn', 'numpy', 'gridmap'],
     'packages': ['adascreen', 'adascreen_experiments'],  # names of the packages
     'package_dir': {'adascreen' : 'adascreen', 'adascreen_experiments' : 'scripts'},  # locations of the actual package in the source tree
-    'scripts': [],
+    'scripts': ['bin/adascreen_experiment.sh'],
     'name': 'adascreen',
     'classifiers':['Intended Audience :: Science/Research',
                    'Programming Language :: Python',
