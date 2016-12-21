@@ -1,3 +1,3 @@
 #!/usr/bin/env python
 
-from adascreen_experiment import test_lasso
+from adascreen_experiments import test_lasso
