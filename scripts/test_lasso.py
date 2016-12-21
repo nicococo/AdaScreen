@@ -10,7 +10,7 @@ from experiment_impl import *
 def remote_iteration(r, arguments, exms_to_load, directory):
     import numpy as np
     import resource
-    from screening_rules import EDPP, DOME, DPP, SAFE, StrongRule, HSConstr
+    from adascreen.screening_rules import EDPP, DOME, DPP, SAFE, StrongRule, HSConstr
     from adascreen.bagscreen import BagScreen
     from adascreen.adascreen import AdaScreen
     from adascreen.sasvi import Sasvi
