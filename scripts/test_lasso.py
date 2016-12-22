@@ -17,9 +17,12 @@ def remote_iteration(r, arguments, exms_to_load, directory):
     from adascreen.sasvi import Sasvi
     import adascreen.utils as utils
     import uuid
-    
-    startMem = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
-    print 'Memory usage: %s (kb)' % resource.getrusage(resource.RUSAGE_SELF).ru_maxrss    
+
+    try:
+        startMem = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+        print 'Memory usage: %s (kb)' % resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+    except Exception:
+        print 'No resource package: memory usage stats not available.'
     
     # set a random seed
     np.random.seed(int(uuid.uuid1(r).int % 0xFFFFFFFF))
