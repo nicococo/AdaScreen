@@ -63,6 +63,8 @@ def _send_zmq_msg(job_id, command, data, address):
     (and get a reply back)
     """
     logger = logging.getLogger(__name__)
+    logger.warning('AAA Connecting to JobMonitor (%s)', address)
+
     context = zmq.Context()
     zsocket = context.socket(zmq.REQ)
     logger.debug('Connecting to JobMonitor (%s)', address)
@@ -256,7 +258,6 @@ def _main():
     args = parser.parse_args()
 
     # Make warnings from built-in warnings module get formatted more nicely
-    logging.captureDebugs(True)
     logging.captureWarnings(True)
     logging.basicConfig(format=('%(asctime)s - %(name)s - %(levelname)s - ' +
                                 '%(message)s'), level=logging.INFO)
