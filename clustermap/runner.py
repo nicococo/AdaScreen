@@ -63,13 +63,9 @@ def _send_zmq_msg(job_id, command, data, address):
     (and get a reply back)
     """
     logger = logging.getLogger(__name__)
-    logger.warning('AAA Connecting to JobMonitor (%s)', address)
-
     context = zmq.Context()
-    logger.warning('BBB Connecting to JobMonitor (%s)', address)
-
     zsocket = context.socket(zmq.REQ)
-    logger.debug('Connecting to JobMonitor (%s)', address)
+    logger.warning('Connecting to JobMonitor (%s)', address)
     zsocket.connect(address)
 
     host_name = socket.gethostname()
