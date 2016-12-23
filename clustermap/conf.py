@@ -84,7 +84,7 @@ except (ImportError, RuntimeError):
 
 # how much time can pass between heartbeats, before
 # job is assummed to be dead in seconds
-MAX_TIME_BETWEEN_HEARTBEATS = int(os.getenv('MAX_TIME_BETWEEN_HEARTBEATS', '120'))
+MAX_TIME_BETWEEN_HEARTBEATS = int(os.getenv('MAX_TIME_BETWEEN_HEARTBEATS', '240'))
 
 IDLE_THRESHOLD = float(os.getenv('IDLE_THRESHOLD', '1.0'))
 MAX_IDLE_HEARTBEATS = int(os.getenv('MAX_IDLE_HEARTBEATS', '5'))
