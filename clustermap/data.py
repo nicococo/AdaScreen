@@ -30,8 +30,7 @@ This modules provides all of the data-related function for gridmap.
 :author: Dan Blanchard (dblanchard@ets.org)
 
 """
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals)
+from __future__ import (absolute_import, division, print_function, unicode_literals)
 
 import bz2
 try:
@@ -49,7 +48,8 @@ def zdumps(obj):
 
     :returns: An bz2-compressed pickle of the given object.
     """
-    return bz2.compress(pickle.dumps(obj, pickle.HIGHEST_PROTOCOL), 9)
+    # return bz2.compress(pickle.dumps(obj, pickle.HIGHEST_PROTOCOL), 9)
+    return obj
 
 
 def zloads(pickled_data):
@@ -61,5 +61,5 @@ def zloads(pickled_data):
 
     :returns: An unpickled version of the compressed byte sequence.
     """
-    return pickle.loads(bz2.decompress(pickled_data))
-
+    # return pickle.loads(bz2.decompress(pickled_data))
+    return pickled_data

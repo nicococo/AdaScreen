@@ -167,13 +167,10 @@ def get_job_status(parent_pid, heart_pid):
     :returns: Memory and CPU load information for given PID.
     :rtype: dict
     """
-
     status_container = {}
-
     if parent_pid != -1:
         status_container["memory"] = get_memory_usage(parent_pid, heart_pid)
         status_container["cpu_load"] = get_cpu_load(parent_pid, heart_pid)
-
     return status_container
 
 
@@ -196,7 +193,7 @@ def _run_job(job_id, address):
     logger.info("Starting heart beat")
     heart.start()
 
-    wait_sec = random.randint(0, 5)
+    wait_sec = random.randint(2, 5)
     logger.info("Waiting %i seconds before fetching input", wait_sec)
     time.sleep(wait_sec)
 
@@ -205,13 +202,10 @@ def _run_job(job_id, address):
     except Exception as e:
         # here we will catch errors caused by pickled objects
         # of classes defined in modules not in PYTHONPATH
-        logger.error('Could not retrieve input for job {0}'.format(job_id),
-                     exc_info=True)
+        logger.error('Could not retrieve input for job {0}'.format(job_id), exc_info=True)
 
         # send back exception and traceback string
-        thank_you_note = _send_zmq_msg(job_id, "store_output",
-                                       (e, traceback.format_exc()),
-                                       address)
+        thank_you_note = _send_zmq_msg(job_id, "store_output", (e, traceback.format_exc()), address)
         # stop heartbeat
         heart.terminate()
         return
@@ -235,9 +229,7 @@ def _run_job(job_id, address):
     # If anything goes wrong, send back the exception
     except Exception as e:
         # send back exception and traceback string
-        thank_you_note = _send_zmq_msg(job_id, "store_output",
-                                       (e, traceback.format_exc()),
-                                       address)
+        thank_you_note = _send_zmq_msg(job_id, "store_output", (e, traceback.format_exc()), address)
         logger.info(thank_you_note)
     finally:
         # stop heartbeat
