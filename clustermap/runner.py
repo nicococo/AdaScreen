@@ -242,3 +242,43 @@ def _run_job(job_id, address):
     finally:
         # stop heartbeat
         heart.terminate()
+
+
+def _main():
+    """
+    Parse the command line inputs and call _run_job
+    """
+
+    # Get command line arguments
+    parser = argparse.ArgumentParser(description="This wrapper script will run \
+                                                  a pickled Python function on \
+                                                  some pickled retrieved data \
+                                                  via 0MQ. You almost never \
+                                                  want to run this yourself.")
+    parser.add_argument('home_address',
+                        help='IP address of submitting host.')
+    parser.add_argument('module_dir',
+                        help='Directory that contains module containing pickled\
+                              function. This will get added to PYTHONPATH \
+                              temporarily.')
+    args = parser.parse_args()
+
+    # Make warnings from built-in warnings module get formatted more nicely
+    logging.captureWarnings(True)
+    logging.basicConfig(format=('%(asctime)s - %(name)s - %(levelname)s - ' +
+                                '%(message)s'), level=logging.INFO)
+    logger = logging.getLogger(__name__)
+
+    logger.info("Appended {0} to PYTHONPATH".format(args.module_dir))
+    sys.path.insert(0, args.module_dir)
+
+    logger.debug("Job ID: %i\tHome address: %s\tModule dir: %s",
+                 os.environ['JOB_ID'],
+                 args.home_address, args.module_dir)
+
+    # Process the database and get job started
+    _run_job(os.environ['JOB_ID'], args.home_address)
+
+
+if __name__ == "__main__":
+    _main()
