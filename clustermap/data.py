@@ -48,8 +48,8 @@ def zdumps(obj):
 
     :returns: An bz2-compressed pickle of the given object.
     """
-    # return bz2.compress(pickle.dumps(obj, pickle.HIGHEST_PROTOCOL), 9)
-    return pickle.dumps(obj, pickle.HIGHEST_PROTOCOL)
+    return bz2.compress(pickle.dumps(obj, pickle.HIGHEST_PROTOCOL), 9)
+    # return pickle.dumps(obj, pickle.HIGHEST_PROTOCOL)
 
 
 def zloads(pickled_data):
@@ -61,5 +61,5 @@ def zloads(pickled_data):
 
     :returns: An unpickled version of the compressed byte sequence.
     """
-    # return pickle.loads(bz2.decompress(pickled_data))
-    return pickle.loads(pickled_data)
+    return pickle.loads(bz2.decompress(pickled_data))
+    # return pickle.loads(pickled_data)

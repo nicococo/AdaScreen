@@ -256,6 +256,7 @@ def _main():
     args = parser.parse_args()
 
     # Make warnings from built-in warnings module get formatted more nicely
+    logging.captureDebugs(True)
     logging.captureWarnings(True)
     logging.basicConfig(format=('%(asctime)s - %(name)s - %(levelname)s - ' +
                                 '%(message)s'), level=logging.INFO)
