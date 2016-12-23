@@ -244,6 +244,7 @@ def _main():
     """
     Parse the command line inputs and call _run_job
     """
+    import argparse
 
     # Get command line arguments
     parser = argparse.ArgumentParser(description="This wrapper script will run \

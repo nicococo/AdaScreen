@@ -44,10 +44,9 @@ import multiprocessing
 import os
 import sys
 import traceback
+import socket
 from datetime import datetime
 from importlib import import_module
-from multiprocessing import Pool
-from socket import gethostname, gethostbyname
 
 import zmq
 
@@ -249,14 +248,10 @@ class JobMonitor(object):
         self.temp_dir = temp_dir
         self.socket = context.socket(zmq.REP)
 
-        import socket as socket
-
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(('8.8.8.8', 0))  # connecting to a UDP address doesn't send packets
         local_ip_address = s.getsockname()[0]
-
-        self.host_name = gethostname()
-        # self.ip_address = gethostbyname(self.host_name)
+        self.host_name = socket.gethostname()
         self.ip_address = local_ip_address
         self.interface = "tcp://%s" % (self.ip_address)
 
