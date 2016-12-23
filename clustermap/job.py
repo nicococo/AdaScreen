@@ -507,8 +507,8 @@ def _execute(rets, job):
     Cannot pickle method instances, so fake a function.
     Used by _process_jobs_locally
     """
-    job.ret = job.execute()
-    rets[job.id] = job
+    job.execute()
+    rets[job.id] = job.ret
 
 
 def _process_jobs_locally(jobs, max_processes=1):
@@ -541,8 +541,9 @@ def _process_jobs_locally(jobs, max_processes=1):
 
         for p in ps:
             proc, job, res = p
-            p.join()
+            proc.join()
             job.ret = res[job.id]
+
     return jobs
 
 
