@@ -169,11 +169,9 @@ class Job(object):
         setter for function that carefully takes care of
         namespace, avoiding __main__ as a module
         """
-
         m = inspect.getmodule(f)
         try:
-            self.path = os.path.dirname(os.path.abspath(
-                inspect.getsourcefile(f)))
+            self.path = os.path.dirname(os.path.abspath(inspect.getsourcefile(f)))
         except TypeError:
             self.path = ''
 
@@ -182,7 +180,6 @@ class Job(object):
             self._f = f
 
         else:
-
             # determine real module name
             mn = os.path.splitext(os.path.basename(m.__file__))[0]
 
@@ -253,6 +250,8 @@ class JobMonitor(object):
         local_ip_address = s.getsockname()[0]
         self.host_name = socket.gethostname()
         self.ip_address = local_ip_address
+        if self.ip_address[:3] == '127':
+            self.logger.error("IP address is localhost: {0}".format(self.ip_address))
         self.interface = "tcp://%s" % (self.ip_address)
 
         # bind to random port and remember it
@@ -539,8 +538,7 @@ def _process_jobs_locally(jobs, max_processes=1):
             p.start()
             ps.append((p, job, results))
 
-        for p in ps:
-            proc, job, res = p
+        for (proc, job, res) in ps:
             proc.join()
             job.ret = res[job.id]
 

@@ -127,7 +127,7 @@ def _screening_solver_acceleration(X, y, steps, lower_bound=0.001, screening_rul
             res[s,i] = float(np.sum(times[:i]))
 
         myLasso = ScreeningLassoPath(ScreenDummy(), solver[curr_solver_ind], path_lb=lower_bound, path_steps=steps, path_stepsize=geomul, path_scale='geometric')
-        beta, nz_inds, scr_inds, path, t1, _ = myLasso.fit(X.T, y, max_iter=1000, tol=1e-3, debug=False)
+        beta, nz_inds, scr_inds, path, t1, _ = myLasso.fit(X.T, y, max_iter=1000, tol=1e-4, debug=False)
         times = (np.array(t1)).tolist()
         for i in range(1,steps):
             res[s, i] = float(np.sum(times[:i])) / res[s, i]
