@@ -3,7 +3,7 @@ import os
 import argparse
 import logging
 
-from gridmap import Job, process_jobs
+from clustermap import Job, process_jobs
 
 from experiment_impl import *
 
@@ -207,9 +207,9 @@ logging.basicConfig(format=('%(asctime)s - %(name)s - %(levelname)s - ' +
                             '%(message)s'), level=logging.INFO)
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-d","--dataset", help="Dataset to run (default Toy)", default="Pie", type=str)
+parser.add_argument("-d","--dataset", help="Dataset to run (default Toy)", default="Toy", type=str)
 parser.add_argument("-o","--hold_out", help="Fraction of hold-out examples for reps (default 0.0)", default=0.0, type =float)
-parser.add_argument("-r","--reps", help="number repetitions (default 1)", default=1, type =int)
+parser.add_argument("-r","--reps", help="number repetitions (default 1)", default=2, type =int)
 parser.add_argument("-e","--experiment", help="experiment [0-5] (default 1)", default=5, type =int)
 parser.add_argument("-s","--screening_rule", help="active screening rule [0-3] (default -1=all)", default=-1, type =int)
 parser.add_argument("-l","--screening_rule_set", help="Select a screening rule set by name (default all)", default='all', type =str)
@@ -221,7 +221,7 @@ parser.add_argument("-c","--corr", help="Correlation coefficient for Toy dataset
 parser.add_argument("-t","--toy_exms", help="Number of toy examples (default 100)", default=20, type =int)
 parser.add_argument("-f","--toy_feats", help="Number of toy features (default 10000)", default=1000, type =int)
 parser.add_argument("-z","--mem_max", help="Ensures that processes do not need more than this amount of memory(default 16G)", default='16G', type =str)
-parser.add_argument("-m","--max_processes", help="Maximum number of processes (-1 = cluster) (default 1)", default=1, type =int)
+parser.add_argument("-m","--max_processes", help="Maximum number of processes (-1 = cluster) (default 1)", default=2, type =int)
 arguments = parser.parse_args(sys.argv[1:])
 
 print('Parameters:')
@@ -238,17 +238,25 @@ if not os.path.exists(directory):
 directory = 'results_{0}/intermediate'.format(arguments.dataset)
 if not os.path.exists(directory):
     os.makedirs(directory)
+directory = 'results_{0}/clustermap'.format(arguments.dataset)
+clustermap_temp_dir = directory
+if not os.path.exists(directory):
+    os.makedirs(directory)
 directory = 'results_{0}/'.format(arguments.dataset, arguments.screening_rule_set)
 
 # create empty job vector
 jobs = []
 for r in range(arguments.reps):
     job = Job(remote_iteration, [r, arguments, exms_to_load, directory], \
-        mem_max=arguments.mem_max, mem_free='16G', name='{0}({1})'.format(arguments.dataset, arguments.screening_rule_set))
+        mem_max=arguments.mem_max,
+        mem_free='16G',
+        name='{0}({1})'.format(arguments.dataset, arguments.screening_rule_set))
     jobs.append(job)
-    # (res, props, x) = remote_iteration(r, arguments, exms_to_load, screening_rules, solver, directory)
 
-processedJobs = process_jobs(jobs, local=arguments.max_processes>=1, max_processes=arguments.max_processes)
+processedJobs = process_jobs(jobs,
+                             temp_dir=clustermap_temp_dir,
+                             local=arguments.max_processes>=1,
+                             max_processes=arguments.max_processes)
 results = []
 print "ret fields AFTER execution on local machine"
 for (i, result) in enumerate(processedJobs):
