@@ -62,7 +62,6 @@ def _send_zmq_msg(job_id, command, data, address):
     simple code to send messages back to host
     (and get a reply back)
     """
-    import job
     logger = logging.getLogger(__name__)
     context = zmq.Context()
     zsocket = context.socket(zmq.REQ)
