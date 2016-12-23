@@ -249,8 +249,27 @@ class JobMonitor(object):
         self.temp_dir = temp_dir
         self.socket = context.socket(zmq.REP)
 
+        import fcntl
+        import struct
+        import socket as socket
+        def get_interface_ip(ifname):
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            return socket.inet_ntoa(fcntl.ioctl(s.fileno(), 0x8915, struct.pack('256s',
+                                    ifname[:15]))[20:24])
+
+        ip = gethostbyname(gethostname())
+        if ip.startswith("127.") and os.name != "nt":
+            interfaces = ["eth0", "eth1", "eth2"]
+            for ifname in interfaces:
+                try:
+                    ip = get_interface_ip(ifname)
+                    break
+                except IOError:
+                    pass
+
         self.host_name = gethostname()
-        self.ip_address = gethostbyname(self.host_name)
+        # self.ip_address = gethostbyname(self.host_name)
+        self.ip_address = ip
         self.interface = "tcp://%s" % (self.ip_address)
 
         # bind to random port and remember it
