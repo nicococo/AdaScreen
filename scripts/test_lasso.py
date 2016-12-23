@@ -123,7 +123,8 @@ def remote_iteration(r, arguments, exms_to_load, directory):
         (X, y) = utils.load_pie_data('{0}Pie'.format(dpath), transpose=True)
         # 1024(feats) x 11553(exms)
     elif arguments.dataset=='Pems':
-        (X, y) = utils.load_pems_data('{0}pems'.format(dpath), num_feats=arguments.toy_feats)
+        # (X, y) = utils.load_pems_data('{0}pems'.format(dpath), num_feats=arguments.toy_feats)
+        (X, y) = utils.load_pems_data('{0}pems'.format(dpath))
     elif arguments.dataset=='Alzheimer':
         (X, y) = utils.load_alzheimer_data('{0}alzheimer'.format(dpath))
     elif arguments.dataset=='Simul':
