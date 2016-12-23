@@ -66,6 +66,8 @@ def _send_zmq_msg(job_id, command, data, address):
     logger.warning('AAA Connecting to JobMonitor (%s)', address)
 
     context = zmq.Context()
+    logger.warning('BBB Connecting to JobMonitor (%s)', address)
+
     zsocket = context.socket(zmq.REQ)
     logger.debug('Connecting to JobMonitor (%s)', address)
     zsocket.connect(address)

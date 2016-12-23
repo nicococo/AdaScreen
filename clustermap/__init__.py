@@ -33,20 +33,6 @@ in a more 'pythonic' fashion.
                    will use via mem_free? (Default: ``False``)
 :var DEFAULT_QUEUE: The default job scheduling queue to use.
                     (Default: ``all.q``)
-:var CREATE_PLOTS: Should we plot cpu and mem usage and send via email?
-                   (Default: ``True``)
-:var SEND_ERROR_MAIL: Should we send error emails?
-                      (Default: ``True``)
-:var SMTP_SERVER: SMTP server for sending error emails.
-                  (Default: last three sections of the current machine's fully
-                  qualified domain name)
-:var ERROR_MAIL_SENDER: Sender address to use for error emails.
-                        (Default: ``error@gridmap.py``)
-:var ERROR_MAIL_RECIPIENT: Recipient address for error emails.
-                           (Default: $USER@$HOST, where $USER is the current
-                           user's username, and $HOST is the last two sections
-                           of the current machine's fully qualified domain name,
-                           or just the hostname if it does not contain periods.)
 :var MAX_TIME_BETWEEN_HEARTBEATS: How long should we wait (in seconds) for a
                                   heartbeat before we consider a job dead?
                                   (Default: 90)

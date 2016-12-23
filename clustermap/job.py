@@ -284,20 +284,16 @@ class JobMonitor(object):
             with Session(self.session_id) as session:
                 # If we encounter an exception, kill all jobs
                 if exc_type is not None:
-                    self.logger.info('Encountered %s, so killing all jobs.',
-                                     exc_type.__name__)
+                    self.logger.info('Encountered %s, so killing all jobs.', exc_type.__name__)
                     # try to kill off all old jobs
                     try:
-                        session.control(JOB_IDS_SESSION_ALL,
-                                        JobControlAction.TERMINATE)
+                        session.control(JOB_IDS_SESSION_ALL, JobControlAction.TERMINATE)
                     except InvalidJobException:
-                        self.logger.debug("Could not kill all jobs for " +
-                                          "session.", exc_info=True)
+                        self.logger.debug("Could not kill all jobs for session.", exc_info=True)
 
                 # Get rid of job info to prevent memory leak
                 try:
-                    session.synchronize([JOB_IDS_SESSION_ALL], TIMEOUT_NO_WAIT,
-                                        dispose=True)
+                    session.synchronize([JOB_IDS_SESSION_ALL], TIMEOUT_NO_WAIT, dispose=True)
                 except ExitTimeoutException:
                     pass
 
@@ -315,8 +311,7 @@ class JobMonitor(object):
         # determines in which interval to check if jobs are alive
         self.logger.debug('Starting local hearbeat')
         local_heart = multiprocessing.Process(target=_heart_beat,
-                                              args=(-1, self.home_address, -1,
-                                                    "", CHECK_FREQUENCY))
+                                              args=(-1, self.home_address, -1, "", CHECK_FREQUENCY))
         local_heart.start()
         try:
             self.logger.debug("Starting ZMQ event loop")
@@ -327,7 +322,6 @@ class JobMonitor(object):
                 msg = zloads(msg_str)
                 self.logger.debug('Received message: %s', msg)
                 return_msg = ""
-
                 job_id = msg["job_id"]
 
                 # only if its not the local beat
@@ -339,8 +333,7 @@ class JobMonitor(object):
                         if msg["command"] == "fetch_input":
                             return_msg = self.id_to_job[job_id]
                             job.timestamp = datetime.now()
-                            self.logger.debug("Received input request from %s",
-                                              job_id)
+                            self.logger.debug("Received input request from %s", job_id)
 
                         if msg["command"] == "store_output":
                             # be nice
@@ -352,16 +345,13 @@ class JobMonitor(object):
                                 # copy relevant fields
                                 job.ret = tmp_job.ret
                                 job.traceback = tmp_job.traceback
-                                self.logger.info("Received output from %s",
-                                                  job_id)
+                                self.logger.info("Received output from %s", job_id)
                             # Returned exception instead of job, so store that
                             elif isinstance(msg["data"], tuple):
                                 job.ret, job.traceback = msg["data"]
-                                self.logger.info("Received exception from %s",
-                                                  job_id)
+                                self.logger.info("Received exception from %s", job_id)
                             else:
-                                self.logger.error(("Received message with " +
-                                                   "invalid data: %s"), msg)
+                                self.logger.error(("Received message with invalid data: %s"), msg)
                                 job.ret = msg["data"]
                             job.timestamp = datetime.now()
 
@@ -373,8 +363,7 @@ class JobMonitor(object):
                                 job.track_mem.append(job.heart_beat["memory"])
                                 job.track_cpu.append(job.heart_beat["cpu_load"])
                             except (ValueError, TypeError):
-                                self.logger.error("Error decoding heart-beat",
-                                                  exc_info=True)
+                                self.logger.error("Error decoding heart-beat", exc_info=True)
                             return_msg = "all good"
                             job.timestamp = datetime.now()
 
@@ -386,10 +375,8 @@ class JobMonitor(object):
                             job.host_name = msg["host_name"]
                     # If this is an unknown job, report it and reply
                     else:
-                        self.logger.error(('Received message from unknown job' +
-                                           ' with ID %s. Known job IDs are: ' +
-                                           '%s'), job_id,
-                                          list(self.id_to_job.keys()))
+                        self.logger.error(('Received message from unknown job with ID %s. Known job IDs are: ' +
+                                           '%s'), job_id, list(self.id_to_job.keys()))
                         return_msg = 'thanks, but no thanks'
                 else:
                     # run check
@@ -459,9 +446,7 @@ class JobMonitor(object):
                 job.track_mem = []
                 handle_resubmit(self.session_id, job, temp_dir=self.temp_dir)
                 # Update job ID if successfully resubmitted
-                self.logger.info('Resubmitted job %s; it now has ID %s',
-                                 old_id,
-                                 job.id)
+                self.logger.info('Resubmitted job %s; it now has ID %s', old_id, job.id)
                 del self.id_to_job[old_id]
                 self.id_to_job[job.id] = job
 
@@ -474,16 +459,12 @@ class JobMonitor(object):
         """
         if self.logger.getEffectiveLevel() == logging.DEBUG:
             num_jobs = len(self.jobs)
-            num_completed = sum((job.ret != _JOB_NOT_FINISHED and
-                                 not isinstance(job.ret, Exception))
+            num_completed = sum((job.ret != _JOB_NOT_FINISHED and not isinstance(job.ret, Exception))
                                 for job in self.jobs)
-            self.logger.debug('%i out of %i jobs completed', num_completed,
-                              num_jobs)
+            self.logger.debug('%i out of %i jobs completed', num_completed, num_jobs)
 
         # exceptions will be handled in check_if_alive
-        return all((job.ret != _JOB_NOT_FINISHED and not isinstance(job.ret,
-                                                                    Exception))
-                   for job in self.jobs)
+        return all((job.ret != _JOB_NOT_FINISHED and not isinstance(job.ret, Exception)) for job in self.jobs)
 
 
 def handle_resubmit(session_id, job, temp_dir='/home/nico/tmp/'):
@@ -516,8 +497,7 @@ def handle_resubmit(session_id, job, temp_dir='/home/nico/tmp/'):
         _resubmit(session_id, job, temp_dir)
     else:
         raise JobException(("Job {0} ({1}) failed after {2} " +
-                            "resubmissions").format(job.name, job.id,
-                                                    NUM_RESUBMITS))
+                            "resubmissions").format(job.name, job.id, NUM_RESUBMITS))
 
 
 def _execute(rets, job):
@@ -645,15 +625,11 @@ def _append_job_to_session(session, job, temp_dir='/home/nico/tmp/', quiet=True)
 
     # set job fields that depend on the job_id assigned by grid engine
     job.id = job_id
-    job.log_stdout_fn = os.path.join(temp_dir, '{}.o{}'.format(job.name,
-                                                               job_id))
-    log_stderr_fn = os.path.join(temp_dir, '{}.e{}'.format(job.name,
-                                                               job_id))
+    job.log_stdout_fn = os.path.join(temp_dir, '{}.o{}'.format(job.name, job_id))
+    log_stderr_fn = os.path.join(temp_dir, '{}.e{}'.format(job.name, job_id))
 
     if not quiet:
-        print('Your job {} has been submitted with id {}'.format(job.name,
-                                                                 job_id),
-              file=sys.stderr)
+        print('Your job {} has been submitted with id {}'.format(job.name, job_id), file=sys.stderr)
 
     session.deleteJobTemplate(jt)
 
@@ -722,8 +698,7 @@ def _resubmit(session_id, job, temp_dir):
                 session.control(job.id, JobControlAction.TERMINATE)
                 logger.info("zombie job killed")
             except Exception:
-                logger.error("Could not kill job with SGE id %s", job.id,
-                             exc_info=True)
+                logger.error("Could not kill job with SGE id %s", job.id, exc_info=True)
             # create new job
             _append_job_to_session(session, job, temp_dir=temp_dir)
     else:

@@ -77,8 +77,7 @@ try:
     DRMAA_PRESENT = True
 except (ImportError, RuntimeError):
     logger = logging.getLogger(__name__)
-    logger.warning('Could not import drmaa. Only local multiprocessing ' +
-                   'supported.')
+    logger.warning('Could not import drmaa. Only local multiprocessing supported.')
     DRMAA_PRESENT = False
 
 # Global settings ####
