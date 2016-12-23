@@ -67,7 +67,8 @@ class ExperimentViewProperties(object):
         plt.xlabel(self.x_axis_name, fontsize=18)
         plt.ylabel(self.y_axis_name, fontsize=18)
         if self.names is not None:
-            plt.legend(self.names, loc=self.legend_loc, fontsize=12)
+            if len(self.names) > 0:
+                plt.legend(self.names, loc=self.legend_loc, fontsize=12)
         plt.xticks(x, fontsize=10)
         plt.xscale(xscale)
         #plt.text(0.12, 0.85, '{0}'.format(self.getStats()), fontsize = 12, color = 'k')
