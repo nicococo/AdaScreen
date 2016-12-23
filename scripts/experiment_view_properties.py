@@ -70,5 +70,6 @@ class ExperimentViewProperties(object):
         #plt.text(0.12, 0.85, '{0}'.format(self.getStats()), fontsize = 12, color = 'k')
         if save_pdf:
             plt.savefig('{0}{1}_{2}_{3}.pdf'.format(directory, self.getFname(),xscale,nomarker), format='pdf')
-        plt.show()
+        else:
+            plt.show()
 
