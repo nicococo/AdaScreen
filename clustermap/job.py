@@ -520,14 +520,13 @@ def handle_resubmit(session_id, job, temp_dir='/home/nico/tmp/'):
                                                     NUM_RESUBMITS))
 
 
-def _execute(job):
+def _execute(rets, job):
     """
     Cannot pickle method instances, so fake a function.
     Used by _process_jobs_locally
     """
-    print ('aaaaa');
-    job.execute()
-    return job.ret
+    job.ret = job.execute()
+    rets[job.id] = job
 
 
 def _process_jobs_locally(jobs, max_processes=1):
@@ -550,18 +549,18 @@ def _process_jobs_locally(jobs, max_processes=1):
         for job in jobs:
             job.execute()
     else:
-        print ('dkjjfkdjfkjfkjdkjf 1');
-        pool = Pool(processes=max_processes)
-        print ('dkjjfkdjfkjfkjdkjf 2');
-        result = pool.map(_execute, jobs)
-        print ('dkjjfkdjfkjfkjdkjf 3');
-        for ret_val, job in zip(result, jobs):
-            job.ret = ret_val
+        manager = multiprocessing.Manager()
+        ps = []
+        for job in jobs:
+            results = manager.dict()
+            p = multiprocessing.Process(target=_execute, args=(results, job))
+            p.start()
+            ps.append((p, job, results))
 
-        print ('dkjjfkdjfkjfkjdkjf');
-        pool.close()
-        pool.join()
-        print ('dkjjfkdjfkjfkjdkjf END');
+        for p in ps:
+            proc, job, res = p
+            p.join()
+            job.ret = res[job.id]
     return jobs
 
 
