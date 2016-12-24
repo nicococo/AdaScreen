@@ -4,7 +4,7 @@ import sklearn.linear_model as lm
 # un-comment if you have compile enet_solver
 print '0'
 import pyximport; pyximport.install()
-import adascreen.enet_solver
+import enet_solver
 # import imp
 # try:
 #     print '1'
