@@ -22,8 +22,9 @@ config = {
                     'clustermap' : 'clustermap',
                     'adascreen_experiments' : 'scripts'},  # locations of the actual package in the source tree
     'scripts': ['bin/adascreen_experiment.sh'],
-    'ext_modules' : cythonize([Extension("adascreen.enet_solver",["adascreen/enet_solver.pyx"],
-        include_dirs=[np.get_include()])]),
+    'ext_modules' : cythonize(['adascreen/enet_solver.pyx']),
+    # 'ext_modules' : cythonize([Extension("adascreen.enet_solver",["adascreen/enet_solver.pyx"],
+    #     include_dirs=[np.get_include()])]),
     'classifiers':['Intended Audience :: Science/Research',
                    'Programming Language :: Python',
                    'Topic :: Scientific/Engineering',
