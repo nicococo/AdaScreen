@@ -16,6 +16,9 @@ try:
     import enet_solver
     found_enet_solver = True
 except ImportError:
+    import os
+    files = [f for f in os.listdir('.') if os.path.isfile(f)]
+    print files
     cythonize("adascreen/enet_solver.pyx")
     found_enet_solver = False
 
