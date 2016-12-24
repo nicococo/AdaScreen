@@ -16,13 +16,13 @@ try:
     import enet_solver
     found_enet_solver = True
 except ImportError:
-    import os
-    import adascreen
-    path = os.path.dirname(adascreen.__file__)
-    print path
-    print [f for f in os.listdir(path) if os.path.isfile(f)]
-    cythonize("{0}/enet_solver.pyx".format(path))
     found_enet_solver = False
+import os
+import adascreen
+path = os.path.dirname(adascreen.__file__)
+print path
+print [f for f in os.listdir(path)]
+cythonize("{0}/enet_solver.pyx".format(path))
 
 # un-comment if you have installed glmnet
 import imp
