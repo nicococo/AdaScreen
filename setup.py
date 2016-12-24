@@ -20,7 +20,7 @@ config = {
                     'clustermap' : 'clustermap',
                     'adascreen_experiments' : 'scripts'},  # locations of the actual package in the source tree
     'scripts': ['bin/adascreen_experiment.sh'],
-    'ext_modules' : cythonize('*.pyx'),
+    'ext_modules' : cythonize('adascreen/*.pyx'),
     'classifiers':['Intended Audience :: Science/Research',
                    'Programming Language :: Python',
                    'Topic :: Scientific/Engineering',
