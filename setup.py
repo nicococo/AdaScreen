@@ -3,7 +3,13 @@ try:
 except ImportError:
     from distutils.core import setup
 
+from distutils.extension import Extension
+from Cython.Build import cythonize
+
+import numpy as np
+
 config = {
+    'name': 'adascreen',
     'description': 'AdaScreen - Ensembles of Screening Rules',
     'url': 'https://github.com/nicococo/AdaScreen',
     'author': 'Nico Goernitz',
@@ -16,7 +22,8 @@ config = {
                     'clustermap' : 'clustermap',
                     'adascreen_experiments' : 'scripts'},  # locations of the actual package in the source tree
     'scripts': ['bin/adascreen_experiment.sh'],
-    'name': 'adascreen',
+    'ext_modules' : cythonize([Extension("adascreen/enet_solver",["adascreen/enet_solver.pyx"],
+        include_dirs=[np.get_include()])]),
     'classifiers':['Intended Audience :: Science/Research',
                    'Programming Language :: Python',
                    'Topic :: Scientific/Engineering',
