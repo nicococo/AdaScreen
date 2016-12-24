@@ -1,9 +1,16 @@
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
+# try:
+#     from setuptools import setup
+# except ImportError:
 
+from distutils.core import setup
+from distutils.extension import Extension
+from Cython.Distutils import build_ext
 from Cython.Build import cythonize
+
+
+ext_modules = [
+    Extension("adascreen/enet_solver", ["adascreen/enet_solver.pyx"])
+]
 
 
 config = {
@@ -20,7 +27,8 @@ config = {
                     'clustermap' : 'clustermap',
                     'adascreen_experiments' : 'scripts'},  # locations of the actual package in the source tree
     'scripts': ['bin/adascreen_experiment.sh'],
-    'ext_modules' : cythonize('adascreen/*.pyx'),
+    'cmdclass' : {'build_ext': build_ext},
+    'ext_modules' : cythonize(ext_modules),
     'classifiers':['Intended Audience :: Science/Research',
                    'Programming Language :: Python',
                    'Topic :: Scientific/Engineering',
