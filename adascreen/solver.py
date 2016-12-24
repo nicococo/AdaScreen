@@ -2,12 +2,16 @@ import numpy as np
 import sklearn.linear_model as lm
 
 # un-comment if you have compile enet_solver
+print '0'
 import imp
 try:
+    print '1'
     import pyximport; pyximport.install()
+    print '2'
+    import enet_solver
+    print '3'
     imp.find_module('enet_solver')
     found_enet_solver = True
-    import enet_solver
 except ImportError:
     found_enet_solver = False
 
