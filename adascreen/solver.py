@@ -16,7 +16,7 @@ try:
     import enet_solver
     found_enet_solver = True
 except ImportError:
-    cythonize("enet_solver.pyx")
+    cythonize("adascreen/enet_solver.pyx")
     found_enet_solver = False
 
 # un-comment if you have installed glmnet
