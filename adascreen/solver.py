@@ -1,20 +1,23 @@
 import numpy as np
 import sklearn.linear_model as lm
+from Cython.Build import cythonize
 
 # un-comment if you have compile enet_solver
 print '0'
-import pyximport; pyximport.install()
-import enet_solver
-# import imp
-# try:
-#     print '1'
-#     import pyximport; pyximport.install()
-#     import enet_solver
-#     print '3'
-#     imp.find_module('enet_solver')
-#     found_enet_solver = True
-# except ImportError:
-#     found_enet_solver = False
+# import pyximport; pyximport.install()
+# import enet_solver
+import imp
+try:
+    print '1'
+    # import pyximport; pyximport.install()
+    # import enet_solver
+    print '3'
+    imp.find_module('enet_solver')
+    import enet_solver
+    found_enet_solver = True
+except ImportError:
+    cythonize("enet_solver.pyx")
+    found_enet_solver = False
 
 # un-comment if you have installed glmnet
 import imp
