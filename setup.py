@@ -28,8 +28,8 @@ config = {
                     'adascreen_experiments' : 'scripts'},  # locations of the actual package in the source tree
     'scripts': ['bin/adascreen_experiment.sh'],
     # 'cmdclass' : {'build_ext': build_ext},
-    'ext_modules' : cythonize(ext_modules),
     # 'include_dirs' :  [np.get_include()],
+    'ext_modules' : cythonize(ext_modules),
     'classifiers':['Intended Audience :: Science/Research',
                    'Programming Language :: Python',
                    'Topic :: Scientific/Engineering',
