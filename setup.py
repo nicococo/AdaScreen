@@ -14,7 +14,7 @@ config = {
     'author_email': 'nico.goernitz@tu-berlin.de',
     'version': '2016.12.21',
     'install_requires': ['nose', 'scikit-learn', 'numpy', 'multiprocessing',
-                         'drmaa', 'psutil', 'pyzmq'],
+                         'drmaa', 'psutil', 'pyzmq', 'cython'],
     'packages': ['adascreen', 'adascreen_experiments', 'clustermap'],  # names of the packages
     'package_dir': {'adascreen' : 'adascreen',
                     'clustermap' : 'clustermap',
