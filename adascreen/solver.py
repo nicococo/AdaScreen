@@ -4,6 +4,7 @@ import sklearn.linear_model as lm
 # un-comment if you have compile enet_solver
 import imp
 try:
+    import pyximport; pyximport.install()
     imp.find_module('enet_solver')
     found_enet_solver = True
     import enet_solver
