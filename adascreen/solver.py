@@ -20,6 +20,7 @@ except ImportError:
     import adascreen
     path = os.path.dirname(adascreen.__file__)
     print path
+    print [f for f in os.listdir(path) if os.path.isfile(f)]
     cythonize("{0}/enet_solver.pyx".format(path))
     found_enet_solver = False
 
