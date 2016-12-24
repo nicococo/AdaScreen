@@ -7,7 +7,6 @@ import imp
 try:
     print '1'
     import pyximport; pyximport.install()
-    print '2'
     import enet_solver
     print '3'
     imp.find_module('enet_solver')
