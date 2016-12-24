@@ -9,7 +9,7 @@ from Cython.Build import cythonize
 
 
 ext_modules = [
-    Extension("adascreen/enet_solver", ["adascreen/enet_solver.pyx"])
+    Extension("enet_solver", ["adascreen/enet_solver.pyx"])
 ]
 
 
