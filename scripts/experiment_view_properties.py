@@ -54,8 +54,12 @@ class ExperimentViewProperties(object):
         self.show(x, means, stds, xscale='log', nomarker=False, save_pdf=save_pdf, directory=directory)       
         self.show(x, means, stds, xscale='linear', nomarker=True, save_pdf=save_pdf, directory=directory)        
         self.show(x, means, stds, xscale='log', nomarker=True, save_pdf=save_pdf, directory=directory)        
+        self.show(x, means, stds, use_stds=False, xscale='linear', nomarker=True, save_pdf=save_pdf, directory=directory)
+        self.show(x, means, stds, use_stds=False, xscale='log', nomarker=True, save_pdf=save_pdf, directory=directory)
 
-    def show(self, x, means, stds, xscale='linear', nomarker=False, save_pdf=True, directory=''):
+    def show(self, x, means, stds, xscale='linear', use_stds=True, nomarker=False, save_pdf=True, directory=''):
+        if not use_stds:
+            stds = np.zeros(means.shape)
         plt.figure()
         for i in range(means.shape[0]):
             if nomarker:
@@ -73,7 +77,8 @@ class ExperimentViewProperties(object):
         plt.xscale(xscale)
         #plt.text(0.12, 0.85, '{0}'.format(self.getStats()), fontsize = 12, color = 'k')
         if save_pdf:
-            plt.savefig('{0}{1}_{2}_{3}.pdf'.format(directory, self.getFname(),xscale,nomarker), format='pdf')
+            plt.savefig('{0}{1}_{2}_{3}_{4}.pdf'.format(directory, self.getFname(),
+                                                        xscale, nomarker, use_stds), format='pdf')
         else:
             plt.show()
 

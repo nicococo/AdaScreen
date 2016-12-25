@@ -113,7 +113,7 @@ def _screening_solver_acceleration(X, y, steps, lower_bound=0.001, screening_rul
     props.setStats(X)
 
     input = np.zeros(steps)
-    res = np.zeros((len(solver)+1, steps))
+    res = np.ones((len(solver)+1, steps))
 
     for s in range(len(solver)):
         print 'Memory usage: %s (kb)' % resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
@@ -131,7 +131,8 @@ def _screening_solver_acceleration(X, y, steps, lower_bound=0.001, screening_rul
         times = (np.array(t1)).tolist()
         for i in range(1,steps):
             res[s, i] = float(np.sum(times[:i])) / res[s, i]
-        props.names.append(solver[s])
+
+    props.names.append('Solver w/o screening')
 
     input[0] = 1.0
     for i in range(1, len(path)):
