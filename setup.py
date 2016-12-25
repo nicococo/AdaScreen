@@ -15,7 +15,7 @@ config = {
                     'clustermap' : 'clustermap',
                     'adascreen_experiments' : 'scripts'},  # locations of the actual package in the source tree
     'scripts': ['bin/adascreen_experiment.sh'],
-    'package_data' : {'adascreen/enet_solver': ['adascreen/enet_solver.pyx']},
+    'package_data' : {'adascreen': ['adascreen/enet_solver.pyx']},
     'classifiers':['Intended Audience :: Science/Research',
                    'Programming Language :: Python',
                    'Topic :: Scientific/Engineering',
