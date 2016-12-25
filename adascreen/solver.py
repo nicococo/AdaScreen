@@ -14,6 +14,7 @@ except ImportError:
     print path
     print [f for f in os.listdir(path)]
     cythonize("{0}/enet_solver.pyx".format(path))
+    import pyximport; pyximport.install()
     import enet_solver
 
 # un-comment if you have installed glmnet
