@@ -3,26 +3,18 @@ import sklearn.linear_model as lm
 from Cython.Build import cythonize
 
 # un-comment if you have compile enet_solver
-print '0'
-# import pyximport; pyximport.install()
-# import enet_solver
 import imp
 try:
-    print '1'
-    # import pyximport; pyximport.install()
-    # import enet_solver
-    print '3'
     imp.find_module('enet_solver')
     import enet_solver
-    found_enet_solver = True
 except ImportError:
-    found_enet_solver = False
-import os
-import adascreen
-path = os.path.dirname(adascreen.__file__)
-print path
-print [f for f in os.listdir(path)]
-cythonize("{0}/enet_solver.pyx".format(path))
+    import os
+    import adascreen
+    path = os.path.dirname(adascreen.__file__)
+    print path
+    print [f for f in os.listdir(path)]
+    cythonize("{0}/enet_solver.pyx".format(path))
+    import enet_solver
 
 # un-comment if you have installed glmnet
 import imp
