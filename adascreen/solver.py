@@ -6,9 +6,9 @@ from Cython.Build import cythonize
 import imp
 found_enet_solver = True
 try:
-    imp.find_module('enet_solver')
     import pyximport; pyximport.install()
     import enet_solver
+    imp.find_module('enet_solver')
 except ImportError:
     # import os
     # import adascreen
