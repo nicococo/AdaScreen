@@ -4,18 +4,19 @@ from Cython.Build import cythonize
 
 # un-comment if you have compile enet_solver
 import imp
+found_enet_solver = True
 try:
     imp.find_module('enet_solver')
-    import enet_solver
-except ImportError:
-    import os
-    import adascreen
-    path = os.path.dirname(adascreen.__file__)
-    print path
-    print [f for f in os.listdir(path)]
-    cythonize("{0}/enet_solver.pyx".format(path))
     import pyximport; pyximport.install()
     import enet_solver
+except ImportError:
+    # import os
+    # import adascreen
+    # path = os.path.dirname(adascreen.__file__)
+    # print path
+    # print [f for f in os.listdir(path)]
+    # cythonize("{0}/enet_solver.pyx".format(path))
+    found_enet_solver = False
 
 # un-comment if you have installed glmnet
 import imp
