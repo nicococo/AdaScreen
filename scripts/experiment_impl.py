@@ -78,7 +78,7 @@ def _screening_times(X, y, steps, solver_ind=None, speed_up=False, lower_bound=0
     props = ExperimentViewProperties('Runtime Comparison', '$\lambda / \lambda_{max}$', 'Time in [sec]', loc=1, xscale='log')
     res = np.zeros((len(screening_rules)+1, steps))  # all screening rules + solver w/o screening
     if speed_up:
-        props = ExperimentViewProperties('Runtime Comparison', '$\lambda / \lambda_{max}$', 'Speed-up', loc=1, xscale='log')
+        props = ExperimentViewProperties('Speed-up Comparison', '$\lambda / \lambda_{max}$', 'Speed-up', loc=1, xscale='log')
         res = np.ones((len(screening_rules), steps))  # all screening rules
     props.setStats(X)
 
