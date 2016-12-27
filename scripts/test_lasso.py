@@ -221,7 +221,8 @@ def main_method():
     parser.add_argument("-c","--corr", help="Correlation coefficient for Toy dataset (default 0.6)", default=0.6, type =float)
     parser.add_argument("-t","--toy_exms", help="Number of toy examples (default 100)", default=20, type =int)
     parser.add_argument("-f","--toy_feats", help="Number of toy features (default 10000)", default=1000, type =int)
-    parser.add_argument("-z","--mem_max", help="Ensures that processes do not need more than this amount of memory(default 16G)", default='16G', type =str)
+    parser.add_argument("-z1","--mem_max", help="Ensures that processes do not need more than this amount of memory(default 16G)", default='16G', type =str)
+    parser.add_argument("-z2","--mem_free", help="Ensures that processes has at least this amount of memory at disposal (default 16G)", default='16G', type =str)
     parser.add_argument("-m","--max_processes", help="Maximum number of processes (-1 = cluster) (default 1)", default=2, type =int)
     arguments = parser.parse_args(sys.argv[1:])
 
@@ -250,7 +251,7 @@ def main_method():
     for r in range(arguments.reps):
         job = Job(remote_iteration, [r, arguments, exms_to_load, directory], \
             mem_max=arguments.mem_max,
-            mem_free='32G',
+            mem_free=arguments.mem_free,
             name='{0}({1})'.format(arguments.dataset, arguments.screening_rule_set))
         jobs.append(job)
 
