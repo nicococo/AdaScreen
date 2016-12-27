@@ -250,7 +250,7 @@ def main_method():
     for r in range(arguments.reps):
         job = Job(remote_iteration, [r, arguments, exms_to_load, directory], \
             mem_max=arguments.mem_max,
-            mem_free='16G',
+            mem_free='32G',
             name='{0}({1})'.format(arguments.dataset, arguments.screening_rule_set))
         jobs.append(job)
 
