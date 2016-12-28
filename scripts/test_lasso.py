@@ -184,7 +184,6 @@ def remote_iteration(r, arguments, exms_to_load, directory):
 
 def remote_save_result(results, props, x, arguments, exms_to_load, directory):
     import numpy as np
-    from experiment_view_properties import ExperimentViewProperties
     # combine all results
     means = np.mean(results, axis=0)
     stds = np.std(results, axis=0, ddof=0)
@@ -197,7 +196,7 @@ def remote_save_result(results, props, x, arguments, exms_to_load, directory):
     np.savez('{0}{1}_{2}'.format(directory, \
         arguments.screening_rule_set, props.getFname()), reps=arguments.reps, \
         dataset=arguments.dataset, nexms=exms_to_load, x=x, results=results, \
-        means=means, stds=stds, arguments=arguments)
+        means=means, stds=stds, arguments=arguments, props=props)
     props.plot(x, means, stds, save_pdf=True, directory='{0}{1}_'.format(directory, \
         arguments.screening_rule_set))    
 
