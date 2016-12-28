@@ -9,33 +9,33 @@ from experiment_view_properties import ExperimentViewProperties
 
 
 # X-axis: lambda / lambda_max, Y-axis: rejection rate (one shot)
-def screening_performance_one_shot(X, y, steps=65, screening_rules=None, solver_ind=1, geomul=0.9):
+def screening_performance_one_shot(X, y, steps=65, screening_rules=None, solver_ind=0, geomul=0.9):
     return _screening_rejection_rate(X, y, True, steps=steps, screening_rules=screening_rules, solver_ind=solver_ind, geomul=geomul)
 
 
 # X-axis: lambda / lambda_max, Y-axis: rejection rate (sequential screening)
-def screening_performance_sequential(X, y, steps=65, screening_rules=None, solver_ind=1, geomul=0.9):
+def screening_performance_sequential(X, y, steps=65, screening_rules=None, solver_ind=0, geomul=0.9):
     return _screening_rejection_rate(X, y, False, steps=steps, screening_rules=screening_rules, solver_ind=solver_ind, geomul=geomul)
 
 
 # X-axis: lambda / lambda_max, Y-axis: time in seconds
-def path_times(X, y, steps=65, screening_rules=None, solver_ind=1, geomul=0.9):
+def path_times(X, y, steps=65, screening_rules=None, solver_ind=0, geomul=0.9):
     return _screening_times(X, y, steps=steps, solver_ind=solver_ind, screening_rules=screening_rules, geomul=geomul)
 
 
 # X-axis: lambda / lambda_max, Y-axis: Speed-up
-def path_speed_up(X, y, steps=65, screening_rules=None, solver_ind=1, geomul=0.9):
+def path_speed_up(X, y, steps=65, screening_rules=None, solver_ind=0, geomul=0.9):
     return _screening_times(X, y, steps=steps, solver_ind=solver_ind, speed_up=True,
                             screening_rules=screening_rules, geomul=geomul)
 
 
 # X-axis: lambda / lambda_max, Y-axis: time in seconds
-def path_solver_acceleration(X, y, steps=65, screening_rules=None, solver_ind=1, geomul=0.9):
+def path_solver_acceleration(X, y, steps=65, screening_rules=None, solver_ind=-1, geomul=0.9):
     return _screening_solver_acceleration(X, y, steps=steps, screening_rules=screening_rules, geomul=geomul)
 
 
 # X-axis: lambda / lambda_max, Y-axis: MSE
-def path_accuracy(X, y, steps=65, screening_rules=None, solver_ind=1, geomul=0.9):
+def path_accuracy(X, y, steps=65, screening_rules=None, solver_ind=-1, geomul=0.9):
     return _path_accuracy(X, y, steps=steps, train_test_ratio=0.8, geomul=geomul)
 
 
