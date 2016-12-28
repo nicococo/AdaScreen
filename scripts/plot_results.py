@@ -1,5 +1,5 @@
 import matplotlib as mpl
-mpl.use('MacOSX')
+mpl.use('TkAgg')
 
 import numpy as np
 import experiment_view_properties as p
@@ -16,8 +16,8 @@ print foo['results']
 names = []
 for i in range(len(experiment_impl.solver)):
     names.append(experiment_impl.solver[i])
-names.append('None')
+names.append('Baseline')
 
-v = p.ExperimentViewProperties('Title', 'x-axis', 'y-axis', loc=3, xscale='log')
+v = p.ExperimentViewProperties('Title', '$\lambda/\lambda_{max}$', 'y-axis', loc=2, xscale='log')
 v.names = names
-v.show(x, means, stds, use_stds=False, nomarker=False, save_pdf=False, xscale='log')
+v.show(x, means, stds, use_stds=False, nomarker=True, save_pdf=False, xscale='log')

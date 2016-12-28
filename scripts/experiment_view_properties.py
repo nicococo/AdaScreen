@@ -15,8 +15,11 @@ class ExperimentViewProperties(object):
     exms = 0
     names = None
     legend_loc = 1
-    marker = ['o','^','p','*','D','o','s','H','h','<','>']
-    colors = ['b','g','r','c','m','y','k',np.random.rand(3),np.random.rand(3),np.random.rand(3)]
+    widths = [6.0,8.0,2.0,8.0,9.0,4.0,6.0,6.0,6.0,6.0]
+    opaque = [0.7,0.7,1.0,0.7,0.2,1.0,0.4,0.3,0.2,0.1]
+    lines  = ['--','-','-','--','-','-','-','-','-','-','-']
+    marker = ['.','.',' ','.','.',' ','.','.','.','.']
+    colors = ['b','g','r','y','m','c','k','k','k','k']
 
     def __init__(self, title, x, y, loc=1, xscale='linear'):
         self.x_axis_name = x
@@ -62,12 +65,11 @@ class ExperimentViewProperties(object):
 
         if not use_stds:
             stds = np.zeros(means.shape)
+
         plt.figure()
         for i in range(means.shape[0]):
-            if nomarker:
-                plt.errorbar(x, means[i,:], yerr=stds[i,:], fmt=self.getMarker(i), color=self.getColor(i))
-            else:
-                plt.errorbar(x, means[i,:], yerr=stds[i,:], fmt='', color=self.getColor(i))
+            plt.plot(x, means[i, :], color=self.colors[i], linewidth=self.widths[i],
+                     alpha=self.opaque[i], linestyle=self.lines[i], marker=self.marker[i])
 
         plt.title('{0} {1}'.format(self.title,self.info), fontsize=22)
         plt.xlabel(self.x_axis_name, fontsize=18)
