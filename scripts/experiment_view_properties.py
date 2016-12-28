@@ -1,6 +1,3 @@
-# import matplotlib as mpl
-# mpl.use('Agg')
-import matplotlib.pyplot as plt
 import numpy as np
 
 
@@ -58,6 +55,11 @@ class ExperimentViewProperties(object):
         self.show(x, means, stds, use_stds=False, xscale='log', nomarker=True, save_pdf=save_pdf, directory=directory)
 
     def show(self, x, means, stds, xscale='linear', use_stds=True, nomarker=False, save_pdf=True, directory=''):
+        if save_pdf:
+            import matplotlib as mpl
+            mpl.use('Agg')
+        import matplotlib.pyplot as plt
+
         if not use_stds:
             stds = np.zeros(means.shape)
         plt.figure()

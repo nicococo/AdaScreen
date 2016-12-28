@@ -1,6 +1,7 @@
-import numpy as np
 import matplotlib as mpl
 mpl.use('MacOSX')
+
+import numpy as np
 import experiment_view_properties as p
 import experiment_impl
 
