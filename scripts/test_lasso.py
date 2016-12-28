@@ -193,12 +193,12 @@ def remote_save_result(results, props, x, arguments, exms_to_load, directory):
     print stds
     if arguments.dataset=='Toy':
         props.info = '(corr={0})'.format(arguments.corr)
-    np.savez('{0}{1}_{2}'.format(directory, \
-        arguments.screening_rule_set, props.getFname()), reps=arguments.reps, \
+    np.savez('{0}{1}_{2}_{3}'.format(directory, \
+        arguments.dataset, arguments.screening_rule_set, props.getFname()), reps=arguments.reps, \
         dataset=arguments.dataset, nexms=exms_to_load, x=x, results=results, \
         means=means, stds=stds, arguments=arguments, props=props)
-    props.plot(x, means, stds, save_pdf=True, directory='{0}{1}_'.format(directory, \
-        arguments.screening_rule_set))    
+    props.plot(x, means, stds, save_pdf=True, directory='{0}{1}_{2}_'.format(directory, \
+        arguments.dataset, arguments.screening_rule_set))
 
 
 def main_method():

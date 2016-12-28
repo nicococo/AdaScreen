@@ -8,6 +8,7 @@ class ExperimentViewProperties(object):
     """
     title = 'experiment'
     info = ''
+    dataset = ''
     x_axis_name = 'x-axis'
     y_axis_name = 'y-axis'
     xscale = 'linear'
@@ -41,7 +42,8 @@ class ExperimentViewProperties(object):
         return np.random.rand(3)
 
     def getFname(self):
-		fname =  '{0}_{1}x{2}_{3}'.format(self.title.replace(' ' ,'_'),self.exms,self.feats,self.info)
+		fname = '{0}_{1}x{2}_{3}'.format(self.title[:3].replace(' ' ,'_'),
+                                         self.exms, self.feats, self.info)
 		if len(self.names) == 1:
 			fname = fname+str(self.names[0]).replace(' ' ,'_').replace('/',"-")
 		return fname
@@ -50,14 +52,10 @@ class ExperimentViewProperties(object):
         return 'Features $ = {0}$\nExamples $ = {1}$'.format(self.feats, self.exms)
 
     def plot(self, x, means, stds, save_pdf=True, directory=''):
-        self.show(x, means, stds, xscale='linear', nomarker=False, save_pdf=save_pdf, directory=directory)        
-        self.show(x, means, stds, xscale='log', nomarker=False, save_pdf=save_pdf, directory=directory)       
-        self.show(x, means, stds, xscale='linear', nomarker=True, save_pdf=save_pdf, directory=directory)        
-        self.show(x, means, stds, xscale='log', nomarker=True, save_pdf=save_pdf, directory=directory)        
-        self.show(x, means, stds, use_stds=False, xscale='linear', nomarker=True, save_pdf=save_pdf, directory=directory)
-        self.show(x, means, stds, use_stds=False, xscale='log', nomarker=True, save_pdf=save_pdf, directory=directory)
+        self.show(x, means, stds, xscale='linear', save_pdf=save_pdf, directory=directory)
+        self.show(x, means, stds, xscale='log', save_pdf=save_pdf, directory=directory)
 
-    def show(self, x, means, stds, xscale='linear', use_stds=True, nomarker=False, save_pdf=True, directory=''):
+    def show(self, x, means, stds, xscale='linear', use_stds=True, nomarker=False, save_pdf=True, directory='.'):
         if save_pdf:
             import matplotlib as mpl
             mpl.use('Agg')
@@ -81,8 +79,7 @@ class ExperimentViewProperties(object):
         plt.xscale(xscale)
         #plt.text(0.12, 0.85, '{0}'.format(self.getStats()), fontsize = 12, color = 'k')
         if save_pdf:
-            plt.savefig('{0}{1}_{2}_{3}_{4}.pdf'.format(directory, self.getFname(),
-                                                        xscale, nomarker, use_stds), format='pdf')
+            plt.savefig('{0}{1}_{2}.pdf'.format(directory, self.getFname(), xscale), format='pdf')
         else:
             plt.show()
 
