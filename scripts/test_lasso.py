@@ -172,7 +172,7 @@ def remote_iteration(r, arguments, exms_to_load, directory):
         props.info = '(corr={0})'.format(arguments.corr)
 
     np.savez('{0}_run{1}_{2}'.format(output, r, props.getFname()), reps=arguments.reps, dataset=arguments.dataset, \
-        nexms=X.shape[0], x=x, results=[res], means=res, stds=np.zeros(res.shape), arguments=arguments)
+        props=props, nexms=X.shape[0], x=x, results=[res], means=res, stds=np.zeros(res.shape), arguments=arguments)
     props.plot(x, res, np.zeros(res.shape), save_pdf=True, directory='{0}_run{1}_'.format(output,r))    
     print('Experiment arguments:')
     print arguments
@@ -223,7 +223,7 @@ def main_method():
     parser.add_argument("-f","--toy_feats", help="Number of toy features (default 10000)", default=1000, type=int)
     parser.add_argument("-z1","--mem_max", help="Ensures that processes do not need more than this amount of memory(default 16G)", default='16G', type=str)
     parser.add_argument("-z2","--mem_free", help="Ensures that processes has at least this amount of memory at disposal (default 16G)", default='16G', type=str)
-    parser.add_argument("-m","--max_processes", help="Maximum number of processes (-1 = cluster) (default 1)", default=2, type=int)
+    parser.add_argument("-m","--max_processes", help="Maximum number of processes (-1 = cluster) (default 1)", default=1, type=int)
     arguments = parser.parse_args(sys.argv[1:])
 
     print('Parameters:')
