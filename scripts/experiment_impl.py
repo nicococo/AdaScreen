@@ -79,7 +79,7 @@ def _screening_times(X, y, steps, solver_ind=None, speed_up=False, lower_bound=0
     res = np.zeros((len(screening_rules)+1, steps))  # all screening rules + solver w/o screening
     if speed_up:
         props = ExperimentViewProperties('Speed-up Comparison', '$\lambda / \lambda_{max}$', 'Speed-up', loc=1, xscale='log')
-        res = np.ones((len(screening_rules), steps))  # all screening rules
+        res = np.ones((len(screening_rules)+1, steps))  # all screening rules
     props.setStats(X)
 
     for s in range(len(screening_rules)):
@@ -87,13 +87,13 @@ def _screening_times(X, y, steps, solver_ind=None, speed_up=False, lower_bound=0
         curr_solver_ind = solver_ind
         props.names.append(screening_rules[s])
         myLasso = ScreeningLassoPath(screening_rules[s], solver[curr_solver_ind], path_lb=lower_bound, path_steps=steps, path_stepsize=geomul, path_scale='geometric')
-        beta, nz_inds, scr_inds, path, t1, t2 = myLasso.fit(X.T, y, tol=1e-3, debug=False)
+        beta, nz_inds, scr_inds, path, t1, t2 = myLasso.fit(X.T, y, tol=1e-4, debug=False)
         times = (np.array(t1) + np.array(t2)).tolist()
         for i in range(1, steps):
             res[s, i] = float(np.sum(times[:i]))
 
     myLasso = ScreeningLassoPath(ScreenDummy(), solver[solver_ind], path_lb=lower_bound, path_steps=steps, path_stepsize=geomul, path_scale='geometric')
-    beta, nz_inds, scr_inds, path, times1, _ = myLasso.fit(X.T, y, max_iter=1000, tol=1e-3, debug=False)
+    beta, nz_inds, scr_inds, path, times1, _ = myLasso.fit(X.T, y, max_iter=1000, tol=1e-4, debug=False)
     props.names.append('Path solver w/o screening')
 
     input[0] = 1.0
@@ -154,7 +154,7 @@ def _path_accuracy(X, y, steps, train_test_ratio, geomul, lower_bound=0.001):
     y_test = y[inds[end:]]
 
     myLasso = ScreeningLassoPath(ScreenDummy(), solver[0], path_lb=lower_bound, path_steps=steps, path_stepsize=geomul, path_scale='geometric')
-    beta, nz_inds, scr_inds, path, _, _ = myLasso.fit(X_train.T, y_train, max_iter=1000, tol=1e-3, debug=False)
+    beta, nz_inds, scr_inds, path, _, _ = myLasso.fit(X_train.T, y_train, max_iter=1000, tol=1e-4, debug=False)
     y_preds = myLasso.predict_path(beta, X_test.T)
     print y_preds.shape
 
