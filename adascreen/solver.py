@@ -15,7 +15,7 @@ except ImportError:
     # path = os.path.dirname(adascreen.__file__)
     # print path
     # print [f for f in os.listdir(path)]
-    # cythonize("{0}/enet_solver.pyx".format(path))
+    # cythonize("{0}/enet_solver.pyx".format(path), include_dirs=[np.get_include()])
     found_enet_solver = False
 
 # un-comment if you have installed glmnet

@@ -89,6 +89,8 @@ def _screening_times(X, y, steps, solver_ind=None, speed_up=False, lower_bound=0
         myLasso = ScreeningLassoPath(screening_rules[s], solver[curr_solver_ind], path_lb=lower_bound, path_steps=steps, path_stepsize=geomul, path_scale='geometric')
         beta, nz_inds, scr_inds, path, t1, t2 = myLasso.fit(X.T, y, tol=1e-4, debug=False)
         times = (np.array(t1) + np.array(t2)).tolist()
+        if speed_up:  # do not consider screening code time
+            times = (np.array(t1)).tolist()
         for i in range(1, steps):
             res[s, i] = float(np.sum(times[:i]))
 
@@ -120,7 +122,8 @@ def _screening_solver_acceleration(X, y, steps, lower_bound=0.001, screening_rul
 
         myLasso = ScreeningLassoPath(screening_rules[0], solver[curr_solver_ind], path_lb=lower_bound, path_steps=steps, path_stepsize=geomul, path_scale='geometric')
         (beta, nz_inds, scr_inds, path, t1, t2) = myLasso.fit(X.T, y, tol=1e-4, debug=False)
-        times = (np.array(t1) + np.array(t2)).tolist()
+        # times = (np.array(t1) + np.array(t2)).tolist()
+        times = (np.array(t1)).tolist()  # do not consider screening algorithm time here
         for i in range(1,steps):
             res[s,i] = float(np.sum(times[:i]))
 

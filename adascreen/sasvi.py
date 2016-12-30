@@ -33,7 +33,7 @@ class Sasvi(AbstractScreeningRule):
             atb_normed = a.dot(b)/(a_norm*b_norm)
             yT = y - a/a_norm2 * a.dot(y)
             yT_norm = np.linalg.norm(yT)
-            XT = X - Xta[:,np.newaxis].dot(a.reshape(1,a.size)/a_norm2) # feats x exms
+            XT = X - Xta[:, np.newaxis].dot(a.reshape(1,a.size)/a_norm2) # feats x exms
             XT_norm = np.linalg.norm(XT, axis=1)
             XTtyT = XT.dot(yT)
 
