@@ -1,7 +1,6 @@
 import numpy as np
 
 
-
 class ExperimentViewProperties(object):
     """ An instance of this class is returned for each experiment 
         and contains plotting information.  
@@ -17,10 +16,10 @@ class ExperimentViewProperties(object):
     names = None
     legend_loc = 1
     widths = [6.0,8.0,2.0,8.0,9.0,4.0,6.0,6.0,6.0,6.0]
-    opaque = [0.7,0.7,1.0,0.7,0.2,1.0,0.4,0.3,0.3,0.3]
-    lines  = ['--','-','-','--','-','-','-','-','-','','-']
+    opaque = [0.7,0.7,1.0,0.7,0.2,1.0,0.4,0.2,0.3,0.3]
+    lines  = ['--','-','-','--','-','-','-','-',' ',' ']
     marker = ['.','.',' ','.','.',' ','.','.','.','.']
-    colors = ['b','g','r','y','m','c','k','k','k','k']
+    colors = ['b','g','r','y','m','c','k','k',[0.7,0.3,0.0],'k']
 
     def __init__(self, title, x, y, loc=1, xscale='linear'):
         self.x_axis_name = x
@@ -42,11 +41,10 @@ class ExperimentViewProperties(object):
         return np.random.rand(3)
 
     def getFname(self):
-		fname = '{0}_{1}x{2}_{3}'.format(self.title[:3].replace(' ' ,'_'),
-                                         self.exms, self.feats, self.info)
-		if len(self.names) == 1:
-			fname = fname+str(self.names[0]).replace(' ' ,'_').replace('/',"-")
-		return fname
+        fname = '{0}_{1}x{2}'.format(self.title[:3].replace(' ','_'), self.exms, self.feats)
+        if len(self.names) == 1:
+            fname += str(self.names[0]).replace(' ','_').replace('/',"-")
+        return fname
 
     def getStats(self):
         return 'Features $ = {0}$\nExamples $ = {1}$'.format(self.feats, self.exms)

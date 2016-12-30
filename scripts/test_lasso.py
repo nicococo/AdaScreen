@@ -167,12 +167,12 @@ def remote_iteration(r, arguments, exms_to_load, directory):
     print x 
     print res
     print res.shape
-    output = 'results_{0}/intermediate/{1}_'.format(arguments.dataset, arguments.screening_rule_set)
+    output = 'results_{0}/intermediate/{1}'.format(arguments.dataset, arguments.screening_rule_set)
     if arguments.dataset=='Toy':
-        props.info = '(corr={0})'.format(arguments.corr)
+        output += '_(corr={0})'.format(arguments.corr)
 
     np.savez('{0}_run{1}_{2}'.format(output, r, props.getFname()), reps=arguments.reps, dataset=arguments.dataset, \
-        props=props, nexms=X.shape[0], x=x, results=[res], means=res, stds=np.zeros(res.shape), arguments=arguments)
+        legend=props.names, nexms=X.shape[0], x=x, results=[res], means=res, stds=np.zeros(res.shape), arguments=arguments)
     props.plot(x, res, np.zeros(res.shape), save_pdf=True, directory='{0}_run{1}_'.format(output,r))    
     print('Experiment arguments:')
     print arguments
@@ -196,7 +196,7 @@ def remote_save_result(results, props, x, arguments, exms_to_load, directory):
     np.savez('{0}{1}_{2}_{3}'.format(directory, \
         arguments.dataset, arguments.screening_rule_set, props.getFname()), reps=arguments.reps, \
         dataset=arguments.dataset, nexms=exms_to_load, x=x, results=results, \
-        means=means, stds=stds, arguments=arguments, props=props)
+        means=means, stds=stds, arguments=arguments, legend=props.names)
     props.plot(x, means, stds, save_pdf=True, directory='{0}{1}_{2}_'.format(directory, \
         arguments.dataset, arguments.screening_rule_set))
 
@@ -207,17 +207,17 @@ def main_method():
                                 '%(message)s'), level=logging.INFO)
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-d","--dataset", help="Dataset to run (default Toy)", default="Toy", type=str)
+    parser.add_argument("-d","--dataset", help="Dataset to run (default Toy)", default="Pie", type=str)
     parser.add_argument("-o","--hold_out", help="Fraction of hold-out examples for reps (default 0.0)", default=0.0, type=float)
-    parser.add_argument("-r","--reps", help="number repetitions (default 1)", default=2, type=int)
-    parser.add_argument("-e","--experiment", help="experiment [0-5] (default 1)", default=5, type=int)
+    parser.add_argument("-r","--reps", help="number repetitions (default 1)", default=1, type=int)
+    parser.add_argument("-e","--experiment", help="experiment [0-5] (default 1)", default=3, type=int)
     parser.add_argument("-s","--screening_rule", help="active screening rule [0-3] (default -1=all)", default=-1, type=int)
     parser.add_argument("-l","--screening_rule_set", help="Select a screening rule set by name (default all)", default='all', type=str)
     parser.add_argument("-i","--steps", help="number of steps (default 65)", default=65, type =int)
     parser.add_argument("-g","--geometric_mul", help="Multiplier for geometric path (default 0.9)", default=0.9, type=float)
-    parser.add_argument("-u","--use_solver_ind", help="Select the index of the solver to use (default 0 = sklearn CD solver)", default=0, type=int)
+    parser.add_argument("-u","--use_solver_ind", help="Select the index of the solver to use (default 0 = sklearn CD solver)", default=3, type=int)
     parser.add_argument("-p","--path", help="dataset path (default '/home/nicococo/Data/')", default='/Users/nicococo/Data/', type=str)
-    parser.add_argument("-c","--corr", help="Correlation coefficient for Toy dataset (default 0.6)", default=0.6, type=float)
+    parser.add_argument("-c","--corr", help="Correlation coefficient for Toy dataset (default 0.6)", default=0.9, type=float)
     parser.add_argument("-t","--toy_exms", help="Number of toy examples (default 100)", default=20, type=int)
     parser.add_argument("-f","--toy_feats", help="Number of toy features (default 10000)", default=1000, type=int)
     parser.add_argument("-z1","--mem_max", help="Ensures that processes do not need more than this amount of memory(default 16G)", default='16G', type=str)

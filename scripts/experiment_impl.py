@@ -99,10 +99,8 @@ def _screening_times(X, y, steps, solver_ind=None, speed_up=False, lower_bound=0
     input[0] = 1.0
     for i in range(1, len(path)):
         res_time = float(np.sum(times1[:i]))  # solver time w/o screening
-        if speed_up:
-            res[:, i] = res_time / res[:, i]
-        else:
-            res[-1, i] = res_time
+        res[-1, i] = res_time
+        res[:, i] = res_time / res[:, i]
         input[i] = path[i]/path[0]  # lambda / lambda_max
     print 'Memory usage: %s (kb)' % resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
     return input, res, props
