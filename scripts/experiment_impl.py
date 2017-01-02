@@ -20,7 +20,8 @@ def screening_performance_sequential(X, y, steps=65, screening_rules=None, solve
 
 # X-axis: lambda / lambda_max, Y-axis: time in seconds
 def path_times(X, y, steps=65, screening_rules=None, solver_ind=0, geomul=0.9):
-    return _screening_times(X, y, steps=steps, solver_ind=solver_ind, screening_rules=screening_rules, geomul=geomul)
+    return _screening_times(X, y, steps=steps, solver_ind=solver_ind, speed_up=False,
+                            screening_rules=screening_rules, geomul=geomul)
 
 
 # X-axis: lambda / lambda_max, Y-axis: Speed-up
@@ -102,7 +103,8 @@ def _screening_times(X, y, steps, solver_ind=None, speed_up=False, lower_bound=0
     for i in range(1, len(path)):
         res_time = float(np.sum(times1[:i]))  # solver time w/o screening
         res[-1, i] = res_time
-        res[:, i] = res_time / res[:, i]
+        if speed_up:
+            res[:, i] = res_time / res[:, i]
         input[i] = path[i]/path[0]  # lambda / lambda_max
     print 'Memory usage: %s (kb)' % resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
     return input, res, props
