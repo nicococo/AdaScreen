@@ -74,6 +74,7 @@ class ExperimentViewProperties(object):
             if len(self.names) > 0:
                 plt.legend(self.names, loc=self.legend_loc, fontsize=12)
         plt.xticks(x, fontsize=10)
+        plt.xlim([np.min(x), np.max(x)])
         plt.xscale(xscale)
         #plt.text(0.12, 0.85, '{0}'.format(self.getStats()), fontsize = 12, color = 'k')
         if save_pdf:

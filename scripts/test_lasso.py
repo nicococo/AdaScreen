@@ -213,7 +213,7 @@ def main_method():
     parser.add_argument("-e","--experiment", help="experiment [0-5] (default 1)", default=2, type=int)
     parser.add_argument("-s","--screening_rule", help="active screening rule [0-3] (default -1=all)", default=-1, type=int)
     parser.add_argument("-l","--screening_rule_set", help="Select a screening rule set by name (default all)", default='all', type=str)
-    parser.add_argument("-i","--steps", help="number of steps (default 65)", default=65, type =int)
+    parser.add_argument("-i","--steps", help="number of steps (default 65)", default=50, type =int)
     parser.add_argument("-g","--geometric_mul", help="Multiplier for geometric path (default 0.9)", default=0.9, type=float)
     parser.add_argument("-u","--use_solver_ind", help="Select the index of the solver to use (default 0 = sklearn CD solver)", default=0, type=int)
     parser.add_argument("-p","--path", help="dataset path (default '/home/nicococo/Data/')", default='/Users/nicococo/Data/', type=str)
