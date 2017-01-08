@@ -5,11 +5,11 @@ import csv
 import scipy.sparse as sparse
 
 
-
 def tic():
     #Homemade version of matlab tic and toc functions
     global startTime_for_tictoc
     startTime_for_tictoc = time.time()
+
 
 def toc():
     if 'startTime_for_tictoc' in globals():
@@ -20,10 +20,12 @@ def toc():
         print "Toc: start time not set"
     return 0
 
+
 def save_data(X, y, prefix='', delim=' '):
     # expect X \in M(EXMS x DIMS)
     np.savetxt('{0}_X.txt'.format(prefix), X, delimiter=delim)
     np.savetxt('{0}_y.txt'.format(prefix), y, delimiter=delim)
+
 
 def load_svmlight_data(fname):
     (X, y) = skl.datasets.load_svmlight_file(fname)    
@@ -32,12 +34,14 @@ def load_svmlight_data(fname):
     print X
     return (X.todense(), y)
 
+
 def load_simul_data(path):
     # load
     print('Load simul data.')
     X = np.loadtxt('{0}/simul_genome_data_X.txt'.format(path), delimiter=' ')
     y = np.loadtxt('{0}/simul_genome_data_Y.txt'.format(path), delimiter=' ')
     return (X, y)
+
 
 def load_alzheimer_data(path):
     # load
@@ -56,6 +60,7 @@ def load_alzheimer_data(path):
     print X.nbytes
     print 'Done.'
     return (X, y[:,0])
+
 
 def load_pems_data(path, num_feats=-1):
     # load
@@ -76,6 +81,7 @@ def load_pems_data(path, num_feats=-1):
         print '-------'
    
     return (X, y)
+
 
 def load_pie_data(path, transpose=False):
     # load
@@ -100,6 +106,7 @@ def load_pie_data(path, transpose=False):
         print '-------'
     return (X, y)
 
+
 def load_toy_data(exms=100, feats=10000, non_zeros=1000, sigma=0.1, corr=0.5):
     # Generate data similar as done in the Sasvi paper
     #X = np.random.randn(exms, feats)
@@ -114,17 +121,20 @@ def load_toy_data(exms=100, feats=10000, non_zeros=1000, sigma=0.1, corr=0.5):
     y = X.dot(beta_star) + sigma*np.random.rand(exms)
     return (X, y)
 
+
 def load_rand_data(exms=28, feats=10000):
     # see RAND-setting in Xiang et al. 'Screening Tests for Lasso Problems', 2014
     X = np.random.rand(exms, feats)
     y = np.random.rand(exms)
     return (X, y)
 
+
 def load_sklearn_data(exms=100, feats=1000, n_informative=10):
     print dir(skl)
     (X, y, coef) = skl.datasets.make_regression(exms, feats, n_informative=n_informative, coef=True)
     print coef[np.abs(coef)>1e-12]
     return (X, y)
+
 
 def load_GWAS_data(genotype_file, phenotype_file, covariates_file=None, exms=-1, permute=True):
     import pysnptools.pysnptools.util.util
@@ -160,6 +170,7 @@ def load_GWAS_data(genotype_file, phenotype_file, covariates_file=None, exms=-1,
 
     print "done reading"
     return (X, y)
+
 
 def normalize_data(X=None, y=None, mean_free=True):
     # expect X \in M(EXMS x DIMS)

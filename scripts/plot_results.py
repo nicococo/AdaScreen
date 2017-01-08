@@ -65,7 +65,10 @@ ruleset_strong = [ada_strong, StrongRule(), Sasvi(), EDPP()]
 ruleset_hsconstr = [ada1, ada2, ada3, ada4, ada5, EDPP()]
 ruleset_base = [EDPP(), DPP(), DOME()]
 
-foo = np.load('/Users/nicococo/Documents/AdaScreen/Pems_all_Spe_440x138672_.npz')
+# foo = np.load('/Users/nicococo/Documents/AdaScreen/2/Alzheimer_Speedup.npz')
+foo = np.load('/Users/nicococo/Documents/AdaScreen/2/Pems_Solver.npz')
+
+# foo = np.load('/Users/nicococo/Documents/AdaScreen/Pems_all_Spe_440x138672_.npz')
 # foo = np.load('/Users/nicococo/Documents/AdaScreen/Alzheimer_all_Spe_540x511997_.npz')
 # foo = np.load('/Users/nicococo/Documents/AdaScreen/Pie_all_Spe_11554x1023_.npz')
 means = foo['means']
@@ -75,19 +78,26 @@ stds = foo['stds']
 # names = names.item().names
 x = foo['x']
 
+IS_SPEEDUP = False
+IS_SOLVER = True
+X_OFFSET = 30
+
 print foo._files
 print foo['results']
 
-names = []
-for i in range(len(ruleset_all)):
-    names.append(ruleset_all[i])
+if IS_SPEEDUP:
+    names = []
+    for i in range(len(ruleset_all)):
+        names.append(ruleset_all[i])
+    names.append('Solver w/o screening')
+    means[-1, :] = 1.0
 
-names.append('Solver w/o screening')
-means[-1, :] = 1.0
-# for i in range(len(experiment_impl.solver)):
-#     names.append(experiment_impl.solver[i])
-# names.append('Baseline')
+if IS_SOLVER:
+    names = []
+    for i in range(len(experiment_impl.solver)):
+        names.append(experiment_impl.solver[i])
+    names.append('Baseline')
 
 v = p.ExperimentViewProperties('Title', '$\lambda/\lambda_{max}$', 'y-axis', loc=2, xscale='log')
 v.names = names
-v.show(x, means, stds, use_stds=False, nomarker=True, save_pdf=False, xscale='log')
+v.show(x[X_OFFSET:], means[:,X_OFFSET:], stds[:,X_OFFSET:], use_stds=False, nomarker=True, save_pdf=False, xscale='log')

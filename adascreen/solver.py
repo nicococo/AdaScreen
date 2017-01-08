@@ -118,7 +118,7 @@ class ProximalGradientSolver(AbstractSolver):
     def solve(self, start_pos, X, y, l1_reg, l2_reg, max_iter=20000, tol=1e-9, debug=False):
         # X \in R^(samples x feats)
         # y \in R^samples
-        max_iter = 20000
+        # max_iter = 20000
         b = y[:, np.newaxis].copy()
 
         # this is what we wanna solve:
@@ -131,7 +131,7 @@ class ProximalGradientSolver(AbstractSolver):
         g = lambda u : 0.5*(b-X.dot(u)).T.dot(b-X.dot(u)) \
                         + 0.5*l2_reg*u.T.dot(u)
 
-        tol = 1e-3
+        # tol = 1e-3
         w = start_pos[:, np.newaxis]
         tk = 1.
         beta = 0.5
@@ -158,13 +158,13 @@ class ProximalGradientSolver(AbstractSolver):
             if k > 0 and np.abs(obj-dual_obj) < tol:
                 converged = True
             k += 1
+        print 'Solver iter: ', k, ' dual gap: ',np.abs(obj-dual_obj)
 
         if debug:
             # baseline CD solver for comparison
             coefs, dual_gap, eps, n_iter_ = lm.cd_fast.enet_coordinate_descent(
                 start_pos, l1_reg, l2_reg, np.asfortranarray(X), b.reshape((b.size)), max_iter, tol, np.random, 0, 0)
             print k, ' - ', np.abs(f(coefs[:, np.newaxis]) - f(w))
-        print k
 
         return w.reshape((w.size)), 0, 0.
 
@@ -222,7 +222,7 @@ class AccelProximalGradientSolver(AbstractSolver):
             if k > 0 and np.abs(obj-dual_obj) < tol:
                 converged = True
             k += 1
-        print k
+        print 'Solver iter: ', k, ' dual gap: ',np.abs(obj-dual_obj)
 
         if debug:
             # baseline CD solver for comparison

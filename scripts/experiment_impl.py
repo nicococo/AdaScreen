@@ -35,6 +35,11 @@ def path_solver_acceleration(X, y, steps=65, screening_rules=None, solver_ind=-1
     return _screening_solver_acceleration(X, y, steps=steps, screening_rules=screening_rules, geomul=geomul)
 
 
+# X-axis: lambda / lambda_max, Y-axis: time in seconds
+def path_solver_acceleration_nopath(X, y, steps=65, screening_rules=None, solver_ind=-1, geomul=0.9):
+    return _screening_solver_acceleration(X, y, steps=steps, use_path_solver=False, screening_rules=screening_rules, geomul=geomul)
+
+
 # X-axis: lambda / lambda_max, Y-axis: MSE
 def path_accuracy(X, y, steps=65, screening_rules=None, solver_ind=-1, geomul=0.9):
     return _path_accuracy(X, y, steps=steps, train_test_ratio=0.8, geomul=geomul)
@@ -43,8 +48,10 @@ def path_accuracy(X, y, steps=65, screening_rules=None, solver_ind=-1, geomul=0.
 #  --------------------------------------------------------------------------------
 #  EXPERIMENTS IMPLEMENTATION
 
-solver = [SklearnCDSolver(), SklearnLarsSolver(), ActiveSetCDSolver(0),
-          ActiveSetCDSolver(1), ProximalGradientSolver(), AccelProximalGradientSolver()]
+# solver = [SklearnCDSolver(), SklearnLarsSolver(), ActiveSetCDSolver(0),
+#           ActiveSetCDSolver(1), ProximalGradientSolver(), AccelProximalGradientSolver()]
+solver = [SklearnCDSolver(), SklearnLarsSolver(),
+          ProximalGradientSolver(), AccelProximalGradientSolver()]
 
 
 def _screening_rejection_rate(X, y, one_shot, steps, screening_rules=None,
@@ -110,8 +117,11 @@ def _screening_times(X, y, steps, solver_ind=None, speed_up=False, lower_bound=0
     return input, res, props
 
 
-def _screening_solver_acceleration(X, y, steps, lower_bound=0.001, screening_rules=None, geomul=0.9):
-    props = ExperimentViewProperties('Solver Comparison', '$\lambda / \lambda_{max}$', 'Speed-up', loc=1, xscale='log')
+def _screening_solver_acceleration(X, y, steps, lower_bound=0.001, use_path_solver=True, screening_rules=None, geomul=0.9):
+    if use_path_solver:
+        props = ExperimentViewProperties('Path-solver Comparison', '$\lambda / \lambda_{max}$', 'Speed-up', loc=1, xscale='log')
+    else:
+        props = ExperimentViewProperties('Solver Comparison', '$\lambda / \lambda_{max}$', 'Speed-up', loc=1, xscale='log')
     props.setStats(X)
 
     input = np.zeros(steps)
@@ -123,17 +133,24 @@ def _screening_solver_acceleration(X, y, steps, lower_bound=0.001, screening_rul
         props.names.append(solver[s])
 
         myLasso = ScreeningLassoPath(screening_rules[0], solver[curr_solver_ind], path_lb=lower_bound, path_steps=steps, path_stepsize=geomul, path_scale='geometric')
-        (beta, nz_inds, scr_inds, path, t1, t2) = myLasso.fit(X.T, y, tol=1e-4, debug=False)
+        (beta, nz_inds, scr_inds, path, t1, t2) = myLasso.fit(X.T, y, tol=1e-2, max_iter=2000, debug=False)
         # times = (np.array(t1) + np.array(t2)).tolist()
         times = (np.array(t1)).tolist()  # do not consider screening algorithm time here
-        for i in range(1,steps):
+        for i in range(1, steps):
             res[s,i] = float(np.sum(times[:i]))
 
         myLasso = ScreeningLassoPath(ScreenDummy(), solver[curr_solver_ind], path_lb=lower_bound, path_steps=steps, path_stepsize=geomul, path_scale='geometric')
-        beta, nz_inds, scr_inds, path, t1, _ = myLasso.fit(X.T, y, max_iter=1000, tol=1e-4, debug=False)
-        times = (np.array(t1)).tolist()
-        for i in range(1,steps):
-            res[s, i] = float(np.sum(times[:i])) / res[s, i]
+        if use_path_solver:
+            beta, nz_inds, scr_inds, path, t1, _ = myLasso.fit(X.T, y, max_iter=2000, tol=1e-2, debug=False)
+            times = (np.array(t1)).tolist()
+            for i in range(1, steps):
+                res[s, i] = float(np.sum(times[:i])) / res[s, i]
+        else:
+            myLasso.use_warm_start = False
+            beta, nz_inds, scr_inds, path, t1, _ = myLasso.fit(X.T, y, max_iter=2000, tol=1e-2, debug=False)
+            times = (np.array(t1)).tolist()
+            for i in range(1, steps):
+                res[s, i] = float(times[i-1]) / res[s, i]
 
     props.names.append('Solver w/o screening')
 

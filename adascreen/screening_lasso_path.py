@@ -13,4 +13,4 @@ class ScreeningLassoPath(ScreeningElasticNetPath):
         ScreeningElasticNetPath.__init__(self, alg_screen, solver, path_lb, path_ub, path_steps, path_stepsize, path_scale)
 
     def fit(self, X, y, max_iter=20000, tol=1e-6, debug=True):
-        return ScreeningElasticNetPath.fit(self, X, y, l2=0.0, tol=tol, debug=debug)
+        return ScreeningElasticNetPath.fit(self, X, y, l2=0.0, tol=tol, debug=debug, max_iter=max_iter)

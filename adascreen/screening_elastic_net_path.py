@@ -86,7 +86,7 @@ class ScreeningElasticNetPath(object):
     def fit(self, X, y, l2=0.0, max_iter=1000, tol=1e-6, debug=True):
         if sparse.issparse(X):
             raise Exception('SPARSE MATRIX NOT SUPPORTED YET')
- 
+
         # init
         lmax, lmax_ind, lmax_x = self.calc_lambda_max(X,y)
         path = self.get_plain_path() * lmax
@@ -122,7 +122,7 @@ class ScreeningElasticNetPath(object):
         if debug:
             print('Debug is turned on.')
 
-        for i in range(1,P):
+        for i in range(1, P):
             # (a) remove variables either one-shot screening or sequential
             startTime = time.time()
             if self.one_shot_screening:
