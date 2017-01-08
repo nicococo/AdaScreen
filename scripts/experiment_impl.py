@@ -50,7 +50,7 @@ def path_accuracy(X, y, steps=65, screening_rules=None, solver_ind=-1, geomul=0.
 
 # solver = [SklearnCDSolver(), SklearnLarsSolver(), ActiveSetCDSolver(0),
 #           ActiveSetCDSolver(1), ProximalGradientSolver(), AccelProximalGradientSolver()]
-solver = [SklearnCDSolver(), SklearnLarsSolver(),
+solver = [SklearnCDSolver(), SklearnLarsSolver(), ActiveSetCDSolver(1),
           ProximalGradientSolver(), AccelProximalGradientSolver()]
 
 
