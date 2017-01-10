@@ -63,7 +63,7 @@ class ScreeningElasticNetPath(object):
             path = np.linspace(self.path_ub, self.path_lb, self.path_steps)
             for i in range(1, self.path_steps):
                 path[i] = path[i-1]*self.path_stepsize
-                if path[i]<self.path_lb:
+                if path[i] < self.path_lb:
                     if use_geom_hard_lower_bound:
                         path[i] = self.path_lb
                     path = path[:i]
@@ -88,7 +88,7 @@ class ScreeningElasticNetPath(object):
             raise Exception('SPARSE MATRIX NOT SUPPORTED YET')
 
         # init
-        lmax, lmax_ind, lmax_x = self.calc_lambda_max(X,y)
+        lmax, lmax_ind, lmax_x = self.calc_lambda_max(X, y)
         path = self.get_plain_path() * lmax
 
         # screening args

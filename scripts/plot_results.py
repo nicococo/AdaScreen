@@ -65,8 +65,9 @@ ruleset_strong = [ada_strong, StrongRule(), Sasvi(), EDPP()]
 ruleset_hsconstr = [ada1, ada2, ada3, ada4, ada5, EDPP()]
 ruleset_base = [EDPP(), DPP(), DOME()]
 
+foo = np.load('/Users/nicococo/Documents/AdaScreen/2/Alzheimer_Solver.npz')
 # foo = np.load('/Users/nicococo/Documents/AdaScreen/2/Alzheimer_Speedup.npz')
-foo = np.load('/Users/nicococo/Documents/AdaScreen/2/Pems_Solver.npz')
+# foo = np.load('/Users/nicococo/Documents/AdaScreen/2/Pems_Solver.npz')
 
 # foo = np.load('/Users/nicococo/Documents/AdaScreen/Pems_all_Spe_440x138672_.npz')
 # foo = np.load('/Users/nicococo/Documents/AdaScreen/Alzheimer_all_Spe_540x511997_.npz')
@@ -80,7 +81,7 @@ x = foo['x']
 
 IS_SPEEDUP = False
 IS_SOLVER = True
-X_OFFSET = 30
+X_OFFSET = 0
 
 print foo._files
 print foo['results']
@@ -98,6 +99,8 @@ if IS_SOLVER:
         names.append(experiment_impl.solver[i])
     names.append('Baseline')
 
+print x
+print means[0, :]
 v = p.ExperimentViewProperties('Title', '$\lambda/\lambda_{max}$', 'y-axis', loc=2, xscale='log')
 v.names = names
 v.show(x[X_OFFSET:], means[:,X_OFFSET:], stds[:,X_OFFSET:], use_stds=False, nomarker=True, save_pdf=False, xscale='log')

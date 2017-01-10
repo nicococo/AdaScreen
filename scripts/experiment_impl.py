@@ -50,9 +50,11 @@ def path_accuracy(X, y, steps=65, screening_rules=None, solver_ind=-1, geomul=0.
 
 # solver = [SklearnCDSolver(), SklearnLarsSolver(), ActiveSetCDSolver(0),
 #           ActiveSetCDSolver(1), ProximalGradientSolver(), AccelProximalGradientSolver()]
-solver = [SklearnCDSolver(), SklearnLarsSolver(), ActiveSetCDSolver(1),
-          ProximalGradientSolver(), AccelProximalGradientSolver()]
+# solver = [SklearnCDSolver(), SklearnLarsSolver(), ActiveSetCDSolver(1),
+#           ProximalGradientSolver(), AccelProximalGradientSolver()]
 
+solver = [SklearnCDSolver(), SklearnLarsSolver(),
+          ProximalGradientSolver(), AccelProximalGradientSolver()]
 
 def _screening_rejection_rate(X, y, one_shot, steps, screening_rules=None,
                               save_intermediate_results=True, solver_ind=1, geomul=0.9):
@@ -114,7 +116,7 @@ def _screening_times(X, y, steps, solver_ind=None, speed_up=False, lower_bound=0
             res[:, i] = res_time / res[:, i]
         input[i] = path[i]/path[0]  # lambda / lambda_max
     print 'Memory usage: %s (kb)' % resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
-    return input, res, props
+    return input[:path.size], res[:, :path.size], props
 
 
 def _screening_solver_acceleration(X, y, steps, lower_bound=0.001, use_path_solver=True, screening_rules=None, geomul=0.9):
@@ -149,7 +151,7 @@ def _screening_solver_acceleration(X, y, steps, lower_bound=0.001, use_path_solv
             myLasso.use_warm_start = False
             beta, nz_inds, scr_inds, path, t1, _ = myLasso.fit(X.T, y, max_iter=2000, tol=1e-2, debug=False)
             times = (np.array(t1)).tolist()
-            for i in range(1, steps):
+            for i in range(1, len(path)):
                 res[s, i] = float(times[i-1]) / res[s, i]
 
     props.names.append('Solver w/o screening')
@@ -159,7 +161,7 @@ def _screening_solver_acceleration(X, y, steps, lower_bound=0.001, use_path_solv
         input[i] = path[i]/path[0]  # lambda / lambda_max
 
     print 'Memory usage: %s (kb)' % resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
-    return input, res, props
+    return input[:path.size], res[:, :path.size], props
 
 
 def _path_accuracy(X, y, steps, train_test_ratio, geomul, lower_bound=0.001):
@@ -179,7 +181,7 @@ def _path_accuracy(X, y, steps, train_test_ratio, geomul, lower_bound=0.001):
     print y_preds.shape
 
     res = np.zeros((1, steps))
-    for i in range(steps):
+    for i in range(len(path)):
         res[0, i] = mean_squared_error(y_test, y_preds[:, i])
 
     input = np.zeros(steps)
@@ -188,4 +190,4 @@ def _path_accuracy(X, y, steps, train_test_ratio, geomul, lower_bound=0.001):
         input[i] = path[i]/path[0]  # lambda / lambda_max
 
     print 'Memory usage: %s (kb)' % resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
-    return input, res, props
+    return input[:path.size], res[:, :path.size], props
